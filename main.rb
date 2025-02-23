@@ -51,11 +51,11 @@ module ObjC
       description.cStringUsingEncoding(4).force_encoding('UTF-8')
     end
 
-    private
-
     def objc_class
-      @objc_class ||= FFI.object_getClass(self)
+      @objc_class ||= Object.new(FFI.object_getClass(self))
     end
+
+    private
 
     def signature_for_selector(selector)
       type_buffer = ::FFI::MemoryPointer.new(:char, 32)
