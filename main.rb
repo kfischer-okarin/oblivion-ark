@@ -38,17 +38,22 @@ module ObjC
 
       define_singleton_method(method_name) do |*args|
         return_type_signature, argument_signatures = signature_for_selector(selector)
-        p [method_name, return_type_signature, argument_signatures]
         msgSend_arguments = argument_signatures.zip(arguments).flatten
-        p ['sending with', msgSend_arguments]
+        puts "#{self.inspect} -> #{method_name}(#{argument_signatures}) #{return_type_signature} -> #{msgSend_arguments}"
         result = FFI.objc_msgSend(self, selector, *msgSend_arguments)
         result && result.null? ? nil : coerce_return_value(result, return_type_signature)
       end
+
       send(method_name, *arguments)
     end
 
     def inspect
-      description.cStringUsingEncoding(4).force_encoding('UTF-8')
+      # Implement directly to avoid infinite recursion
+      return_value = FFI.objc_msgSend(
+        FFI.objc_msgSend(self, FFI.sel_getUid('description')),
+        FFI.sel_getUid('UTF8String')
+      )
+      return_value.read_string
     end
 
     def objc_class
