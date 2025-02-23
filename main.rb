@@ -25,13 +25,15 @@ module ObjC
 
   class Object < ::FFI::Pointer
     def method_missing(method_name, *arguments)
-      potential_selectors = [method_name.to_s, "#{method_name}:"]
+      selector_candidate_names = [method_name.to_s, "#{method_name}:"]
+      selector_name = nil
       selector = nil
-      potential_selectors.each do |name|
+      selector_candidate_names.each do |name|
         candidate = FFI.sel_getUid(name)
         next unless FFI.class_respondsToSelector(objc_class, candidate)
 
         selector = candidate
+        selector_name = name
         break
       end
       super unless selector
@@ -39,7 +41,7 @@ module ObjC
       define_singleton_method(method_name) do |*args|
         return_type_signature, argument_signatures = signature_for_selector(selector)
         msgSend_arguments = argument_signatures.zip(arguments).flatten
-        puts "#{self.inspect} -> #{method_name}(#{argument_signatures}) #{return_type_signature} -> #{msgSend_arguments}"
+        puts "#{self.inspect} -> #{selector_name}(#{argument_signatures}) #{return_type_signature} -> #{msgSend_arguments}"
         result = FFI.objc_msgSend(self, selector, *msgSend_arguments)
         result && result.null? ? nil : coerce_return_value(result, return_type_signature)
       end
