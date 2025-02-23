@@ -36,7 +36,7 @@ module ObjC
         selector_name = name
         break
       end
-      super unless selector
+      raise NoMethodError, "undefined method `#{method_name}' for #{self.inspect}" unless selector
 
       define_singleton_method(method_name) do |*args|
         return_type_signature, argument_signatures = signature_for_selector(selector)
