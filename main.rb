@@ -6,21 +6,23 @@ module ObjC
   # Basic low-level FFI bindings for Objective-C
   module FFI
     extend ::FFI::Library
-    ffi_lib '/usr/lib/libobjc.A.dylib'
+    # Headers in /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include
+    ffi_lib '/usr/lib/libobjc.dylib'
 
     typedef :pointer, :id
-    typedef :pointer, :method
-    typedef :pointer, :selector
+    typedef :pointer, :Class
+    typedef :pointer, :SEL
+    typedef :pointer, :Method
 
-    attach_function :class_getInstanceMethod, [:id, :selector], :method
-    attach_function :class_respondsToSelector, [:id, :selector], :bool
-    attach_function :method_getArgumentType, [:method, :uint, :pointer, :size_t], :void
-    attach_function :method_getNumberOfArguments, [:method], :uint
-    attach_function :method_getReturnType, [:method, :pointer, :size_t], :void
-    attach_function :objc_getClass, [:string], :id
-    attach_function :objc_msgSend, [:pointer, :selector, :varargs], :pointer
+    attach_function :class_getInstanceMethod, [:Class, :SEL], :Method
+    attach_function :class_respondsToSelector, [:Class, :SEL], :bool
+    attach_function :method_getArgumentType, [:Method, :uint, :pointer, :size_t], :void
+    attach_function :method_getNumberOfArguments, [:Method], :uint
+    attach_function :method_getReturnType, [:Method, :pointer, :size_t], :void
+    attach_function :objc_getClass, [:string], :Class
+    attach_function :objc_msgSend, [:id, :SEL, :varargs], :id
     attach_function :object_getClass, [:id], :id
-    attach_function :sel_getUid, [:string], :selector
+    attach_function :sel_getUid, [:string], :SEL
   end
 
   class Object < ::FFI::Pointer
