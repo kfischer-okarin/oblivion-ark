@@ -10,7 +10,7 @@ module ObjectiveC
 
     def const_missing(name)
       klass = ffi.objc_getClass(name.to_s)
-      Object.new(klass)
+      const_set(name, Object.new(klass))
     end
   end
 end
