@@ -2,7 +2,9 @@ require 'minitest/autorun'
 
 require '../lib/objective_c'
 
-describe ObjectiveC do
+module ResetObjectiveCConstants
+  extend Minitest::Spec::DSL
+
   before do
     @original_constants = ObjectiveC.constants.dup
   end
@@ -12,6 +14,10 @@ describe ObjectiveC do
       ObjectiveC.send(:remove_const, const)
     end
   end
+end
+
+describe ObjectiveC do
+  include ResetObjectiveCConstants
 
   it 'can dynamically reference classes' do
     ns_string_address = 1234
