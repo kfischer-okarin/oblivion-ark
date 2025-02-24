@@ -26,8 +26,12 @@ module ObjC
   end
 
   class Object < ::FFI::Pointer
-    def method_missing(method_name, *arguments)
+    def method_missing(method_name, *arguments, **kwargs)
       selector_candidate_names = [method_name.to_s, "#{method_name}:"]
+      if kwargs.any?
+        # Method name with keyword arguments
+        selector_candidate_names << ["#{method_name}:", kwargs.keys.map { |key| "#{key}:" }].join
+      end
       selector_name = nil
       selector = nil
       selector_candidate_names.each do |name|
