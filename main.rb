@@ -142,19 +142,15 @@ module ObjC
     attach_function :CFRelease, [:pointer], :void
   end
 
+  class CFReference < ::FFI::AutoPointer
+    def self.release(pointer)
+      FFI.CFRelease(pointer)
+    end
+  end
+
   class << self
-    def strings
-      @strings ||= []
-    end
-
     def string(string)
-      cf_string = FFI.CFStringCreateWithCString(nil, string, 0)
-      strings << cf_string
-      cf_string
-    end
-
-    def cleanup
-      strings.each { |string| FFI.CFRelease(string) }
+      CFReference.new FFI.CFStringCreateWithCString(nil, string, 0)
     end
   end
 end
