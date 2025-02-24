@@ -136,6 +136,27 @@ end
 
 module ObjC
   import_library '/System/Library/Frameworks/AppKit.framework/AppKit'
+
+  module FFI
+    attach_function :CFStringCreateWithCString, [:pointer, :string, :int], :pointer
+    attach_function :CFRelease, [:pointer], :void
+  end
+
+  class << self
+    def strings
+      @strings ||= []
+    end
+
+    def string(string)
+      cf_string = FFI.CFStringCreateWithCString(nil, string, 0)
+      strings << cf_string
+      cf_string
+    end
+
+    def cleanup
+      strings.each { |string| FFI.CFRelease(string) }
+    end
+  end
 end
 
 p ObjC::NSApplication.sharedApplication
