@@ -138,6 +138,21 @@ module ObjC
   end
 end
 
+class CGPoint < FFI::Struct
+  layout :x, :double,
+         :y, :double
+end
+
+class CGSize < FFI::Struct
+  layout :width, :double,
+         :height, :double
+end
+
+class CGRect < FFI::Struct
+  layout :origin, CGPoint,
+         :size, CGSize
+end
+
 module ObjC
   import_library '/System/Library/Frameworks/AppKit.framework/AppKit'
 
@@ -159,4 +174,25 @@ module ObjC
   end
 end
 
-p ObjC::NSApplication.sharedApplication
+ObjC::FFI.attach_function :objc_msgSend_id, :objc_msgSend, [:id, :SEL, :id], :id
+ObjC::FFI.attach_function :objc_msgSend_window, :objc_msgSend, [:id, :SEL, CGRect.by_value, :uint, :uint, :bool], :id
+
+def run
+  window = ObjC::NSWindow.alloc
+  rect = CGRect.new
+  rect[:origin][:x] = 0
+  rect[:origin][:y] = 0
+  rect[:size][:width] = 200
+  rect[:size][:height] = 200
+  selector = ObjC::FFI.sel_getUid('initWithContentRect:styleMask:backing:defer:')
+  p ObjC::FFI.objc_msgSend_window(window, selector, rect, 15, 2, false)
+  ObjC::FFI.objc_msgSend_id(window, ObjC::FFI.sel_getUid('setTitle:'), ObjC.string('Hello, World!'))
+  # window.setTitle(ObjC.string('Hello, World!'))
+  window.makeKeyAndOrderFront(nil)
+  ObjC::NSApplication.sharedApplication.run
+  # window.run
+  # window.cobj_send('initWithContentRect:styleMask:backing:defer:', CGRect.by_value, rect, :uint, 15, :uint, 2, :bool, false)
+  # window.initWithContentRect([0, 0, 200, 200], styleMask: 15, backing: 2, defer: false)
+end
+
+run
