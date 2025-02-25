@@ -34,6 +34,8 @@ describe ObjectiveC do
   include ResetObjectiveCConstants
   include WithFFIMock
 
+  let(:any_address) { rand(0xFFFFFFFF) }
+
   it 'can dynamically reference classes' do
     ns_string_address = 1234
     ffi.expect :objc_getClass, ns_string_address, ['NSString']
@@ -43,9 +45,8 @@ describe ObjectiveC do
     assert_equal ns_string_address, klass.address
   end
 
-  it 'only loads the class once' do
-    ns_string_address = 1234
-    ffi.expect :objc_getClass, ns_string_address, ['NSString']
+  it 'only loads classes once' do
+    ffi.expect :objc_getClass, any_address, ['NSString']
 
     first_time = ObjectiveC::NSString
     second_time = ObjectiveC::NSString
