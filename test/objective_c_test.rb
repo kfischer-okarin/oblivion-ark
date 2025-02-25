@@ -34,11 +34,14 @@ describe ObjectiveC do
   include ResetObjectiveCConstants
   include WithFFIMock
 
-  let(:some_pointer) { FFI::Pointer.new(rand(0xFFFFFFFF)) }
+  def build_a_pointer
+    FFI::Pointer.new(rand(0xFFFFFFFF))
+  end
+
   let(:null_pointer) { FFI::Pointer.new(0) }
 
   it 'can dynamically reference classes' do
-    ns_string_pointer = FFI::Pointer.new(1234)
+    ns_string_pointer = build_a_pointer
     ffi.expect :objc_getClass, ns_string_pointer, ['NSString']
 
     klass = ObjectiveC::NSString
@@ -47,7 +50,7 @@ describe ObjectiveC do
   end
 
   it 'only loads classes once' do
-    ffi.expect :objc_getClass, some_pointer, ['NSString']
+    ffi.expect :objc_getClass, build_a_pointer, ['NSString']
 
     first_time = ObjectiveC::NSString
     second_time = ObjectiveC::NSString
