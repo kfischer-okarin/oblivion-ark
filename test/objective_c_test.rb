@@ -35,6 +35,7 @@ describe ObjectiveC do
   include WithFFIMock
 
   let(:some_pointer) { FFI::Pointer.new(rand(0xFFFFFFFF)) }
+  let(:null_pointer) { FFI::Pointer.new(0) }
 
   it 'can dynamically reference classes' do
     ns_string_pointer = FFI::Pointer.new(1234)
@@ -52,5 +53,13 @@ describe ObjectiveC do
     second_time = ObjectiveC::NSString
 
     assert_equal second_time, first_time
+  end
+
+  it 'raises NameError when a class does not exist' do
+    ffi.expect :objc_getClass, null_pointer, ['NonExistentClass']
+
+    assert_raises(NameError) do
+      ObjectiveC::NonExistentClass
+    end
   end
 end
