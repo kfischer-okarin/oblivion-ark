@@ -1,3 +1,4 @@
+require_relative 'objective_c/ffi'
 require_relative 'objective_c/object'
 
 module ObjectiveC
