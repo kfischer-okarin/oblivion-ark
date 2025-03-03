@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require '../lib/objective_c'
+require_relative '../lib/objective_c'
 
 module ResetObjectiveCConstants
   extend Minitest::Spec::DSL
