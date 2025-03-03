@@ -25,3 +25,9 @@ module WithFFIMock
     ffi.verify
   end
 end
+
+module Factories
+  def build_a_pointer
+    FFI::Pointer.new(rand(0xFFFFFFFF))
+  end
+end

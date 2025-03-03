@@ -6,10 +6,7 @@ require_relative '../lib/objective_c'
 describe ObjectiveC do
   include ResetObjectiveCConstants
   include WithFFIMock
-
-  def build_a_pointer
-    FFI::Pointer.new(rand(0xFFFFFFFF))
-  end
+  include Factories
 
   let(:null_pointer) { FFI::Pointer.new(0) }
 
