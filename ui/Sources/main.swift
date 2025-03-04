@@ -9,9 +9,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Create a panel window with a small size and no title bar or buttons
+        // Get screen dimensions to calculate panel size and position
+        let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1200, height: 800)
+        let panelWidth = screenFrame.width * 0.6
+
+        // Create a panel window with no title bar or buttons
         panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 300, height: 100),
+            contentRect: NSRect(x: 0, y: 0, width: panelWidth, height: 100),
             styleMask: [.nonactivatingPanel, .borderless, .hudWindow],
             backing: .buffered,
             defer: false
