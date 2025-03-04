@@ -20,4 +20,10 @@ describe ObjectiveC::Object do
     assert_equal class_pointer, result
     assert_equal class_pointer, result2
   end
+
+  it 'can send a method' do
+    ffi.expect(:sel_getUid, :selector, ['a_method'])
+
+    obj.a_method
+  end
 end

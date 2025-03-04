@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 require_relative 'objective_c/ffi'
 require_relative 'objective_c/object'
 
