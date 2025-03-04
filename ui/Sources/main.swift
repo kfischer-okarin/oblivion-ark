@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = true
-        panel.isMovableByWindowBackground = true  // Allow dragging the panel
+        panel.isMovableByWindowBackground = false  // Make it non-movable
 
         // Create the content view with a light background and rounded corners
         let contentView = NSView(frame: panel.contentView!.bounds)
