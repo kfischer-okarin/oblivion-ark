@@ -55,6 +55,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ])
 
         panel.contentView = contentView
+
+        // Center the panel on the screen
+        let xPosition = (screenFrame.width - panel.frame.width) / 2 + screenFrame.origin.x
+        let yPosition = (screenFrame.height - panel.frame.height) / 2 + screenFrame.origin.y
+        panel.setFrameOrigin(NSPoint(x: xPosition, y: yPosition))
+
         panel.makeKeyAndOrderFront(nil)
 
         // Add a status bar item to control the panel
@@ -65,13 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusMenu.addItem(NSMenuItem(title: "Show/Hide Panel", action: #selector(togglePanel), keyEquivalent: "s"))
         statusMenu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
         statusItem.menu = statusMenu
-
-        // Position panel near the top of the screen
-        if let screenFrame = NSScreen.main?.visibleFrame {
-            let xPosition = (screenFrame.width - panel.frame.width) / 2
-            let yPosition = screenFrame.height - panel.frame.height - 50
-            panel.setFrameOrigin(NSPoint(x: xPosition, y: yPosition))
-        }
     }
 
     @objc func togglePanel() {
