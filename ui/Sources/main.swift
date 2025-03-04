@@ -9,25 +9,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Create a panel window with a small size
+        // Create a panel window with a small size and no title bar or buttons
         panel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: 300, height: 100),
-            styleMask: [.titled, .closable, .nonactivatingPanel],
+            styleMask: [.nonactivatingPanel, .borderless, .hudWindow],
             backing: .buffered,
             defer: false
         )
-        panel.title = "MindHub"
-        panel.center()
         panel.isReleasedWhenClosed = false
         panel.level = .floating  // Make the panel float above others
         panel.isOpaque = false
         panel.backgroundColor = .clear
+        panel.hasShadow = true
+        panel.isMovableByWindowBackground = true  // Allow dragging the panel
 
-        // Create the content view with a light background
+        // Create the content view with a light background and rounded corners
         let contentView = NSView(frame: panel.contentView!.bounds)
         contentView.wantsLayer = true
         contentView.layer?.backgroundColor = NSColor.windowBackgroundColor.withAlphaComponent(0.9).cgColor
-        contentView.layer?.cornerRadius = 8
+        contentView.layer?.cornerRadius = 12
+        contentView.layer?.borderWidth = 1
+        contentView.layer?.borderColor = NSColor.gray.withAlphaComponent(0.3).cgColor
 
         // Create a text label
         let label = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 30))
@@ -56,7 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.title = "MH"
 
         let statusMenu = NSMenu(title: "MindHub Menu")
-        statusMenu.addItem(NSMenuItem(title: "Show Panel", action: #selector(showPanel), keyEquivalent: "s"))
+        statusMenu.addItem(NSMenuItem(title: "Show/Hide Panel", action: #selector(togglePanel), keyEquivalent: "s"))
         statusMenu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
         statusItem.menu = statusMenu
 
@@ -68,8 +70,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @objc func showPanel() {
-        panel.makeKeyAndOrderFront(nil)
+    @objc func togglePanel() {
+        if panel.isVisible {
+            panel.orderOut(nil)
+        } else {
+            panel.makeKeyAndOrderFront(nil)
+        }
     }
 
     @objc func quitApp() {
