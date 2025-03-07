@@ -29,9 +29,22 @@
 		0A6997852D788B64009DF12C /* MindhubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindhubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0AD4A55D2D79F2E500416016 /* Exceptions for "Mindhub" folder in "Mindhub" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0A6997692D788B63009DF12C /* Mindhub */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0A69976C2D788B63009DF12C /* Mindhub */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0AD4A55D2D79F2E500416016 /* Exceptions for "Mindhub" folder in "Mindhub" target */,
+			);
 			path = Mindhub;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Mindhub/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mindhub/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindhub;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -426,6 +440,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Mindhub/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mindhub/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindhub;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
