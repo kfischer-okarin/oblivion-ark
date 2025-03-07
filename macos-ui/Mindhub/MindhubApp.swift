@@ -10,8 +10,11 @@ import SwiftUI
 @main
 struct MindhubApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra {
+
+        } label: {
+            Image(systemName: "brain.head.profile")
+            Text("Mindhub")
         }
     }
 }
