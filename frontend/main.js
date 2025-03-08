@@ -8,6 +8,9 @@ app.on('ready', () => {
       width: 400,
       height: 300,
       frame: false,
+      webPreferences: {
+        devTools: !app.isPackaged,
+      }
     });
 
     await win.loadFile('quick-capture-view.html');
