@@ -11,7 +11,7 @@ app.on('ready', () => {
       }
     });
 
-    await win.loadFile('quick-capture-view.html');
+    await win.loadURL('http://localhost:5173/quick-capture-view.html')
   });
 });
 
