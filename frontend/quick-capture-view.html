@@ -10,29 +10,54 @@
     body {
       height: 100%;
       margin: 0;
-    }
-    body, textarea { /* Same style to make textarea blend with the background */
       background-color: #1e1e1e;
       color: #cfcfcf;
     }
-    textarea {
+    #editor {
       box-sizing: border-box;
       width: 100%;
       height: 100%;
       padding: 10px;
       font-size: 16px;
-      border: none;
-      resize: none;
-      outline: none;
+    }
+    /* Milkdown editor custom styles */
+    .milkdown {
+      height: 100%;
+    }
+    .milkdown .editor {
+      height: 100%;
     }
   </style>
 </head>
 <body>
-  <textarea placeholder="Type your notes here..."></textarea>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('textarea').focus();
-    });
+  <div id="editor"></div>
+
+  <script type="module">
+    import { Editor, rootCtx } from '@milkdown/kit/core';
+    import { commonmark } from '@milkdown/kit/preset/commonmark';
+    import { nord } from '@milkdown/theme-nord';
+    import '@milkdown/theme-nord/style.css';
+
+    async function setupEditor() {
+      const editor = await Editor
+        .make()
+        .config(nord)
+        .config((ctx) => {
+          ctx.set(rootCtx, '#editor');
+        })
+        .use(commonmark)
+        .create();
+
+      // Auto-focus the editor
+      setTimeout(() => {
+        const editorElement = document.querySelector('.milkdown .editor');
+        if (editorElement) {
+          editorElement.focus();
+        }
+      }, 100);
+    }
+
+    document.addEventListener('DOMContentLoaded', setupEditor);
   </script>
 </body>
 </html>
