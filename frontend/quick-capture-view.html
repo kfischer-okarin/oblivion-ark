@@ -4,34 +4,43 @@
   <title>Quick Capture</title>
   <meta charset="UTF-8">
   <style>
-    html {
-      height: 100%;
-    }
     body {
-      height: 100%;
       margin: 0;
     }
-    body, textarea { /* Same style to make textarea blend with the background */
-      background-color: #1e1e1e;
-      color: #cfcfcf;
-    }
-    textarea {
-      box-sizing: border-box;
-      width: 100%;
+    html, body, #editor, .cm-editor {
       height: 100%;
-      padding: 10px;
+    }
+    .cm-editor .cm-content {
       font-size: 16px;
-      border: none;
-      resize: none;
-      outline: none;
     }
   </style>
 </head>
 <body>
-  <textarea placeholder="Type your notes here..."></textarea>
-  <script>
+  <div id="editor"></div>
+
+  <script type="module">
+    import { EditorState } from '@codemirror/state';
+    import { keymap, EditorView, placeholder } from '@codemirror/view';
+    import { standardKeymap, history } from '@codemirror/commands';
+    import { oneDark } from '@codemirror/theme-one-dark';
+
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('textarea').focus();
+      // Create editor view
+      const view = new EditorView({
+        doc: '',
+        parent: document.getElementById('editor'),
+        extensions: [
+          keymap.of([
+            ...standardKeymap,
+          ]),
+          history(),
+          oneDark,
+          placeholder('Type your notes here...'),
+        ],
+      });
+
+      // Focus the editor immediately
+      view.focus();
     });
   </script>
 </body>
