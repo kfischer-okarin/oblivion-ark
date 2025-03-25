@@ -23,6 +23,7 @@
     import { keymap, EditorView, placeholder } from '@codemirror/view';
     import { standardKeymap, history } from '@codemirror/commands';
     import { oneDark } from '@codemirror/theme-one-dark';
+    import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 
     document.addEventListener('DOMContentLoaded', () => {
       // Create editor view
@@ -36,6 +37,9 @@
           history(),
           oneDark,
           placeholder('Type your notes here...'),
+          markdown({
+            base: markdownLanguage,
+          }),
         ],
       });
 
