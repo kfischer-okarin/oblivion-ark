@@ -15,7 +15,13 @@
     "vite": "^6.2.1"
   },
   "dependencyComments": {
+    "@mdxeditor/editor": "Markdown editor React component",
     "electron": "For running the app",
     "vite": "For building the frontend"
+  },
+  "dependencies": {
+    "@mdxeditor/editor": "^3.29.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }
