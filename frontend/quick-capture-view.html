@@ -10,28 +10,29 @@
     body {
       height: 100%;
       margin: 0;
-    }
-    body, textarea { /* Same style to make textarea blend with the background */
       background-color: #1e1e1e;
-      color: #cfcfcf;
     }
-    textarea {
-      box-sizing: border-box;
-      width: 100%;
+    #root {
       height: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      resize: none;
-      outline: none;
+      width: 100%;
+    }
+    .mdxeditor {
+      height: 100%;
     }
   </style>
 </head>
 <body>
-  <textarea placeholder="Type your notes here..."></textarea>
-  <script>
+  <div id="root"></div>
+
+  <script type="module">
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import QuickCaptureApp from './src/components/QuickCaptureApp.jsx';
+
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('textarea').focus();
+      ReactDOM.createRoot(document.getElementById('root')).render(
+        React.createElement(QuickCaptureApp)
+      );
     });
   </script>
 </body>
