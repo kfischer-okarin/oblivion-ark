@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { EventEmitter } from 'events';
 
 const LOG_PREFIX = '\x1b[32m[VITE]\x1b[0m';
 
@@ -16,6 +17,7 @@ function integrateWithViteDevServer(app) {
     return;
   }
 
+  const emitter = new EventEmitter();
   let viteProcess;
 
   app.on('ready', () => {
@@ -33,7 +35,12 @@ function integrateWithViteDevServer(app) {
     });
 
     viteProcess.stdout.on('data', (data) => {
-      logWithPrefixBeforeEachLine(data, console.log);
+      const output = data.toString();
+      logWithPrefixBeforeEachLine(output, console.log);
+
+      if (/VITE.+ready/.test(output)) {
+        emitter.emit('ready');
+      }
     });
 
     viteProcess.stderr.on('data', (data) => {
@@ -50,6 +57,8 @@ function integrateWithViteDevServer(app) {
       viteProcess.kill();
     }
   });
+
+  return emitter;
 }
 
 export { integrateWithViteDevServer };

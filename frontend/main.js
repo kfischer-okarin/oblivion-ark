@@ -2,10 +2,31 @@ import { app, globalShortcut, BrowserWindow } from 'electron';
 
 import { integrateWithViteDevServer } from './viteDevServer.js';
 
-integrateWithViteDevServer(app);
+const viteDevServer = integrateWithViteDevServer(app);
+
+let quickCaptureWindow;
 
 app.on('ready', () => {
-  registerGlobalShortcuts();
+  quickCaptureWindow = new BrowserWindow({
+    width: 640,
+    height: 240,
+    frame: false,
+    webPreferences: {
+      devTools: !app.isPackaged,
+    },
+    show: false,
+  });
+  // TODO: Do this smarter
+  if (app.isPackaged) {
+    quickCaptureWindow.loadFile('quick-capture-view.html');
+  } else {
+    viteDevServer.once('ready', () => {
+      quickCaptureWindow.loadURL('http://localhost:5173/quick-capture-view.html');
+    });
+  }
+  quickCaptureWindow.webContents.on('did-finish-load', () => {
+    registerGlobalShortcuts();
+  });
 });
 
 app.on('will-quit', () => {
@@ -13,21 +34,7 @@ app.on('will-quit', () => {
 });
 
 function registerGlobalShortcuts() {
-  globalShortcut.register('Shift+F5', async () => {
-    const win = new BrowserWindow({
-      width: 640,
-      height: 240,
-      frame: false,
-      webPreferences: {
-        devTools: !app.isPackaged,
-      }
-    });
-
-    // TODO: Do this smarter
-    if (app.isPackaged) {
-      await win.loadFile('quick-capture-view.html');
-    } else {
-      await win.loadURL('http://localhost:5173/quick-capture-view.html');
-    }
+  globalShortcut.register('Shift+F5', () => {
+    quickCaptureWindow.show();
   });
 }
