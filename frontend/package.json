@@ -15,7 +15,17 @@
     "vite": "^6.2.1"
   },
   "dependencyComments": {
+    "@codemirror/commands": "Codemirror base package: Editor Commands",
+    "@codemirror/state": "Codemirror base package: Editor State",
+    "@codemirror/theme-one-dark": "One Dark Theme for Codemirror",
+    "@codemirror/view": "Codemirror base package: Editor View",
     "electron": "For running the app",
     "vite": "For building the frontend"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.8.0",
+    "@codemirror/view": "^6.36.4",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/theme-one-dark": "^6.1.2"
   }
 }
