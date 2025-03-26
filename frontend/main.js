@@ -1,4 +1,4 @@
-import { app, globalShortcut, BrowserWindow } from 'electron';
+import { app, globalShortcut, BrowserWindow, shell } from 'electron';
 
 import { integrateWithViteDevServer } from './viteDevServer.js';
 
@@ -26,6 +26,11 @@ app.on('ready', () => {
   }
   quickCaptureWindow.webContents.on('did-finish-load', () => {
     registerGlobalShortcuts();
+  });
+
+  quickCaptureWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
   });
 });
 
