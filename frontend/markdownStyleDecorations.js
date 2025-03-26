@@ -21,6 +21,21 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
           const line = view.state.doc.lineAt(node.from);
           decorationsArray.push(deco.range(line.from));
         }
+      } else if (node.name === "Emphasis") { // *italic* or _italic_
+        const deco = Decoration.mark({
+          class: "cm-emphasis"
+        });
+        decorationsArray.push(deco.range(node.from, node.to));
+      } else if (node.name === "StrongEmphasis") { // **bold** or __bold__
+        const deco = Decoration.mark({
+          class: "cm-strong"
+        });
+        decorationsArray.push(deco.range(node.from, node.to));
+      } else if (node.name === "Strikethrough") { // ~~strikethrough~~
+        const deco = Decoration.mark({
+          class: "cm-strikethrough"
+        });
+        decorationsArray.push(deco.range(node.from, node.to));
       }
     });
 
