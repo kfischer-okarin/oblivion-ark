@@ -32,9 +32,6 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   // Track command key state
   let isCommandKeyPressed = false
 
-  // Track current hover position
-  let currentHoverPos = null
-
   function handleClick(event, view) {
     // Only process clicks when Command key is pressed
     if (!event.metaKey) {
@@ -56,43 +53,25 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
     return true;
   }
 
-  function handleMouseMove(event, view) {
-    const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
-    currentHoverPos = pos;
-    updateCursorStyle(view);
-  }
-
-  function handleMouseLeave() {
-    currentHoverPos = null;
-    updateCursorStyle();
-  }
-
   function handleKeyDown(event) {
     if (event.key === 'Meta') {
       isCommandKeyPressed = true;
-      updateCursorStyle();
+      updateLinkInteractivity();
     }
   }
 
   function handleKeyUp(event) {
     if (event.key === 'Meta') {
       isCommandKeyPressed = false;
-      updateCursorStyle();
+      updateLinkInteractivity();
     }
   }
 
-  function updateCursorStyle() {
-    const editor = document.querySelector('.cm-editor');
-    if (!editor) return;
-
-    if (isCommandKeyPressed && currentHoverPos !== null) {
-      const isOverLink = linkRanges.some(range =>
-        currentHoverPos >= range.from && currentHoverPos <= range.to
-      );
-
-      editor.style.cursor = isOverLink ? 'pointer' : '';
+  function updateLinkInteractivity() {
+    if (isCommandKeyPressed) {
+      view.dom.classList.add('cm-links-clickable');
     } else {
-      editor.style.cursor = '';
+      view.dom.classList.remove('cm-links-clickable');
     }
   }
 
@@ -154,8 +133,6 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
 
   plugin.update = update;
   plugin.mousedown = handleClick;
-  plugin.mousemove = handleMouseMove;
-  plugin.mouseleave = handleMouseLeave;
 
   // Add global event listeners for command key detection
   window.addEventListener('keydown', handleKeyDown);
@@ -176,14 +153,6 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
     mousedown: (e, view) => {
       return view.plugin(markdownStyleDecorations)?.mousedown(e, view) || false;
     },
-    mousemove: (e, view) => {
-      view.plugin(markdownStyleDecorations)?.mousemove(e, view);
-      return false;
-    },
-    mouseleave: (e, view) => {
-      view.plugin(markdownStyleDecorations)?.mouseleave(e, view);
-      return false;
-    }
   }
 });
 
