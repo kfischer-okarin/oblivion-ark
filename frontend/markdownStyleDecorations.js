@@ -11,6 +11,7 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   const urlColor = urlColorFrom(highlightStyle);
   const buildUrlMark = (url) => Decoration.mark({
     attributes: {
+      'data-url': url,
       style: `text-decoration: underline; color: ${urlColor}; cursor: pointer;`,
     }
   });
@@ -19,7 +20,27 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
     decorations: Decoration.none,
   }
 
+  // Store link data to use when handling clicks
+  let linkRanges = []
+
+  function handleClick(event, view) {
+    // Find decoration elements that were clicked
+    const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
+
+    const matchingRange = linkRanges.find(range => pos >= range.from && pos <= range.to);
+
+    if (!matchingRange) {
+      return false;
+    }
+
+    const { url } = matchingRange;
+    window.open(url, '_blank');
+    event.preventDefault();
+  }
+
   function update(view) {
+    linkRanges = [];
+
     const decorationsArray = [];
     const tree = syntaxTree(view.state);
 
@@ -56,6 +77,7 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
 
         const deco = buildUrlMark(url);
         decorationsArray.push(deco.range(textRange.from, textRange.to));
+        linkRanges.push({ from: textRange.from, to: textRange.to, url });
       } else if (node.name === "URL") {
         // Skip if the node is already a link since we want to stress the link text and not the URL
         if (node.matchContext(["Link"])) {
@@ -65,6 +87,7 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
         const url = view.state.doc.sliceString(node.from, node.to);
         const deco = buildUrlMark(url);
         decorationsArray.push(deco.range(node.from, node.to));
+        linkRanges.push({ from: node.from, to: node.to, url });
       }
     });
 
@@ -72,11 +95,18 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   }
 
   plugin.update = update;
+  plugin.mousedown = handleClick;
+
   update(view);
 
   return plugin;
 }, {
-  decorations: v => v.decorations
+  decorations: v => v.decorations,
+  eventHandlers: {
+    mousedown: (e, view) => {
+      return view.plugin(markdownStyleDecorations)?.mousedown(e, view) || false;
+    }
+  }
 });
 
 function parseLinkNode(node, view) {
