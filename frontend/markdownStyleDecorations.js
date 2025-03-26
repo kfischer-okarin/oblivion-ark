@@ -5,7 +5,9 @@ import { syntaxTree } from '@codemirror/language';
  * Plugin that adds WYSIWYG-like styling to markdown elements
  */
 const markdownStyleDecorations = ViewPlugin.define(view => {
-  let decorations = Decoration.none;
+  const plugin = {
+    decorations: Decoration.none,
+  }
 
   function update(view) {
     const decorationsArray = [];
@@ -39,15 +41,13 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
       }
     });
 
-    decorations = Decoration.set(decorationsArray);
+    plugin.decorations = Decoration.set(decorationsArray);
   }
 
+  plugin.update = update;
   update(view);
 
-  return {
-    update,
-    get decorations() { return decorations; }
-  };
+  return plugin;
 }, {
   decorations: v => v.decorations
 });
