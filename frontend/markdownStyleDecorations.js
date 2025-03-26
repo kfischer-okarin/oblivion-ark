@@ -12,7 +12,7 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   const buildUrlMark = (url) => Decoration.mark({
     attributes: {
       'data-url': url,
-      style: `text-decoration: underline; color: ${urlColor}; cursor: pointer;`,
+      style: `text-decoration: underline; color: ${urlColor};`,
     }
   });
 
@@ -23,7 +23,18 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   // Store link data to use when handling clicks
   let linkRanges = []
 
+  // Track command key state
+  let isCommandKeyPressed = false
+
+  // Track current hover position
+  let currentHoverPos = null
+
   function handleClick(event, view) {
+    // Only process clicks when Command key is pressed
+    if (!event.metaKey) {
+      return false;
+    }
+
     // Find decoration elements that were clicked
     const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
 
@@ -36,6 +47,47 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
     const { url } = matchingRange;
     window.open(url, '_blank');
     event.preventDefault();
+    return true;
+  }
+
+  function handleMouseMove(event, view) {
+    const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
+    currentHoverPos = pos;
+    updateCursorStyle(view);
+  }
+
+  function handleMouseLeave() {
+    currentHoverPos = null;
+    updateCursorStyle();
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Meta') {
+      isCommandKeyPressed = true;
+      updateCursorStyle();
+    }
+  }
+
+  function handleKeyUp(event) {
+    if (event.key === 'Meta') {
+      isCommandKeyPressed = false;
+      updateCursorStyle();
+    }
+  }
+
+  function updateCursorStyle() {
+    const editor = document.querySelector('.cm-editor');
+    if (!editor) return;
+
+    if (isCommandKeyPressed && currentHoverPos !== null) {
+      const isOverLink = linkRanges.some(range =>
+        currentHoverPos >= range.from && currentHoverPos <= range.to
+      );
+
+      editor.style.cursor = isOverLink ? 'pointer' : '';
+    } else {
+      editor.style.cursor = '';
+    }
   }
 
   function update(view) {
@@ -96,6 +148,18 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
 
   plugin.update = update;
   plugin.mousedown = handleClick;
+  plugin.mousemove = handleMouseMove;
+  plugin.mouseleave = handleMouseLeave;
+
+  // Add global event listeners for command key detection
+  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keyup', handleKeyUp);
+
+  // Clean up event listeners when plugin is destroyed
+  plugin.destroy = () => {
+    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener('keyup', handleKeyUp);
+  };
 
   update(view);
 
@@ -105,6 +169,14 @@ const markdownStyleDecorations = ViewPlugin.define(view => {
   eventHandlers: {
     mousedown: (e, view) => {
       return view.plugin(markdownStyleDecorations)?.mousedown(e, view) || false;
+    },
+    mousemove: (e, view) => {
+      view.plugin(markdownStyleDecorations)?.mousemove(e, view);
+      return false;
+    },
+    mouseleave: (e, view) => {
+      view.plugin(markdownStyleDecorations)?.mouseleave(e, view);
+      return false;
     }
   }
 });
