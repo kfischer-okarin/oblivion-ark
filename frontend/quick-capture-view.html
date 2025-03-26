@@ -13,6 +13,15 @@
     .cm-editor .cm-content {
       font-size: 16px;
     }
+    .cm-heading {
+      font-weight: bold;
+    }
+    .cm-heading1 { font-size: 2em; }
+    .cm-heading2 { font-size: 1.75em; }
+    .cm-heading3 { font-size: 1.5em; }
+    .cm-heading4 { font-size: 1.25em; }
+    .cm-heading5 { font-size: 1.1em; }
+    .cm-heading6 { font-size: 1em; }
   </style>
 </head>
 <body>
@@ -24,6 +33,7 @@
     import { standardKeymap, history } from '@codemirror/commands';
     import { oneDark } from '@codemirror/theme-one-dark';
     import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+    import markdownStyleDecorations from './markdownStyleDecorations.js';
 
     document.addEventListener('DOMContentLoaded', () => {
       // Create editor view
@@ -40,6 +50,7 @@
           markdown({
             base: markdownLanguage,
           }),
+          markdownStyleDecorations,
         ],
       });
 
