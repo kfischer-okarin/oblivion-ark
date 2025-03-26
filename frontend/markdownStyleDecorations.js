@@ -9,10 +9,16 @@ import { oneDarkHighlightStyle } from '@codemirror/theme-one-dark';
 const markdownStyleDecorations = ViewPlugin.define(view => {
   const highlightStyle = oneDarkHighlightStyle;
   const urlColor = urlColorFrom(highlightStyle);
+
+  // Set the CSS variable on the editor element
+  if (urlColor) {
+    view.dom.style.setProperty('--url-color', urlColor);
+  }
+
   const buildUrlMark = (url) => Decoration.mark({
     attributes: {
       'data-url': url,
-      style: `text-decoration: underline; color: ${urlColor};`,
+      class: 'cm-url-link'
     }
   });
 
