@@ -1,13 +1,10 @@
 import { ViewPlugin, Decoration } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 
-import { oneDarkHighlightStyle } from '@codemirror/theme-one-dark';
-
 /**
  * Plugin that adds WYSIWYG-like styling to markdown elements
  */
-const markdownStyleDecorations = ViewPlugin.define(view => {
-  const highlightStyle = oneDarkHighlightStyle;
+const markdownStyleDecorations = ({ highlightStyle }) => ViewPlugin.define(view => {
   const urlColor = urlColorFrom(highlightStyle);
 
   // Set the CSS variable on the editor element

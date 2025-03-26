@@ -43,7 +43,7 @@
     import { keymap, EditorView, placeholder } from '@codemirror/view';
     import { standardKeymap, history } from '@codemirror/commands';
     import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
-    import { oneDarkTheme } from '@codemirror/theme-one-dark';
+    import { oneDarkTheme, oneDarkHighlightStyle } from '@codemirror/theme-one-dark';
 
     import markdownStyleDecorations from './markdownStyleDecorations.js';
 
@@ -62,7 +62,9 @@
           markdown({
             base: markdownLanguage,
           }),
-          markdownStyleDecorations,
+          markdownStyleDecorations({
+            highlightStyle: oneDarkHighlightStyle,
+          }),
         ],
       });
 
