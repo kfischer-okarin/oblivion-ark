@@ -1,5 +1,28 @@
-import { ViewPlugin, Decoration } from '@codemirror/view';
+import { ViewPlugin, Decoration, EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
+
+/**
+ * Define the styling for markdown elements dynamically
+ */
+const markdownTheme = EditorView.theme({
+  '.cm-heading': { fontWeight: 'bold' },
+  '.cm-heading1': { fontSize: '2em' },
+  '.cm-heading2': { fontSize: '1.75em' },
+  '.cm-heading3': { fontSize: '1.5em' },
+  '.cm-heading4': { fontSize: '1.25em' },
+  '.cm-heading5': { fontSize: '1.1em' },
+  '.cm-heading6': { fontSize: '1em' },
+  '.cm-emphasis': { fontStyle: 'italic' },
+  '.cm-strong': { fontWeight: 'bold' },
+  '.cm-strikethrough': { textDecoration: 'line-through' },
+  '.cm-url-link': {
+    textDecoration: 'underline',
+    color: 'var(--url-color)'
+  },
+  '&.cm-links-clickable .cm-url-link': {
+    cursor: 'pointer'
+  }
+});
 
 /**
  * Plugin that adds WYSIWYG-like styling to markdown elements
@@ -150,7 +173,8 @@ const markdownStyleDecorations = ({ highlightStyle }) => ViewPlugin.define(view 
     mousedown: (e, view) => {
       return view.plugin(markdownStyleDecorations)?.mousedown(e, view) || false;
     },
-  }
+  },
+  provide: () => markdownTheme,
 });
 
 function parseLinkNode(node, view) {
