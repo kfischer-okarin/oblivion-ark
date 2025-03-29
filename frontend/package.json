@@ -1,7 +1,7 @@
 {
-  "name": "mindhub",
+  "name": "oblivion-ark",
   "version": "1.0.0",
-  "description": "Note Taking",
+  "description": "A personal note-taking app",
   "main": "main.js",
   "type": "module",
   "scripts": {
