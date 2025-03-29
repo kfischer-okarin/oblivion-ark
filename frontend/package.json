@@ -4,10 +4,6 @@
   "description": "A personal note-taking app",
   "main": "main.js",
   "type": "module",
-  "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Kevin Fischer",
   "license": "MIT",
   "devDependencies": {
