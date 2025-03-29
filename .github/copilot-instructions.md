@@ -9,6 +9,10 @@ The system should support quick note-taking, context-aware linking, semantic sea
 - `backend/` contains a Ruby server process that handles the actual application logic
 - `frontend/` contains an Electron UI frontend that communicates via a Unix Socket with the backend process
 
+
+# Development Tools
+- Run `just fix` after applying changes to fix the code format. NEVER spend time on fixing format issues yourself.
+
 # Coding style
 ## Methods / Functions
 - Don't use comments to explain what parts of methods do - instead if a method becomes too long to understand at a glance, extract a private method
