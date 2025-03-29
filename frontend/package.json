@@ -8,6 +8,10 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^35.0.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.5",
+    "prettier": "^3.5.3",
     "vite": "^6.2.1"
   },
   "dependencyComments": {
@@ -17,6 +21,10 @@
     "@codemirror/theme-one-dark": "One Dark Theme for Codemirror",
     "@codemirror/view": "Codemirror base package: Editor View",
     "electron": "For running the app",
+    "eslint": "For linting the code",
+    "eslint-config-prettier": "For prettier config",
+    "eslint-plugin-prettier": "For prettier linting",
+    "prettier": "For formatting the code",
     "vite": "For building the frontend"
   },
   "dependencies": {

@@ -4,3 +4,11 @@ unexport ELECTRON_RUN_AS_NODE
 [working-directory: 'frontend']
 run:
   npx electron .
+
+[working-directory: 'frontend']
+lint:
+  npx eslint .
+
+[working-directory: 'frontend']
+fix:
+  npx eslint . --fix
