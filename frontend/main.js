@@ -2,7 +2,12 @@ import { app, globalShortcut, BrowserWindow, shell } from "electron";
 
 import { integrateWithViteDevServer } from "./viteDevServer.js";
 
-const viteDevServer = integrateWithViteDevServer(app);
+const pageLoader = {
+  loadPage: async (window, relativeFilePath) =>
+    window.loadFile(relativeFilePath),
+};
+
+integrateWithViteDevServer(app, pageLoader);
 
 let quickCaptureWindow;
 
@@ -16,16 +21,9 @@ app.on("ready", () => {
     },
     show: false,
   });
-  // TODO: Do this smarter
-  if (app.isPackaged) {
-    quickCaptureWindow.loadFile("quick-capture-view.html");
-  } else {
-    viteDevServer.once("ready", () => {
-      quickCaptureWindow.loadURL(
-        "http://localhost:5173/quick-capture-view.html",
-      );
-    });
-  }
+
+  pageLoader.loadPage(quickCaptureWindow, "quick-capture-view.html");
+
   quickCaptureWindow.webContents.on("did-finish-load", () => {
     registerGlobalShortcuts();
   });

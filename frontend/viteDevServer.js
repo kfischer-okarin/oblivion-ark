@@ -12,7 +12,7 @@ function logWithPrefixBeforeEachLine(string, logFn) {
   lines.forEach((line) => logFn(`${LOG_PREFIX} ${line}`));
 }
 
-function integrateWithViteDevServer(app) {
+function integrateWithViteDevServer(app, pageLoader) {
   if (app.isPackaged) {
     return;
   }
@@ -57,6 +57,12 @@ function integrateWithViteDevServer(app) {
       viteProcess.kill();
     }
   });
+
+  pageLoader.loadPage = async (window, relativeFilePath) => {
+    emitter.once("ready", () => {
+      window.loadURL(`http://localhost:5173/${relativeFilePath}`);
+    });
+  };
 
   return emitter;
 }
