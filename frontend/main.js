@@ -15,13 +15,22 @@ integrateWithViteDevServer(app, pageLoader);
 
 let quickCaptureWindow;
 
+app.commands = {
+  quickCapture: () => {
+    if (quickCaptureWindow) {
+      quickCaptureWindow.show();
+    }
+  },
+};
+
 app.on("ready", () => {
   quickCaptureWindow = prepareQuickCaptureWindow();
 
   quickCaptureWindow.webContents.on("did-finish-load", () => {
-    globalShortcut.register(settings.quickCaptureKey, () => {
-      quickCaptureWindow.show();
-    });
+    globalShortcut.register(
+      settings.quickCaptureKey,
+      app.commands.quickCapture,
+    );
   });
 });
 
