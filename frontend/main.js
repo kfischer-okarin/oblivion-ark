@@ -2,6 +2,10 @@ import { app, globalShortcut, BrowserWindow, shell } from "electron";
 
 import { integrateWithViteDevServer } from "./viteDevServer.js";
 
+const settings = {
+  quickCaptureKey: "Shift+F5",
+};
+
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
     window.loadFile(relativeFilePath),
@@ -12,7 +16,21 @@ integrateWithViteDevServer(app, pageLoader);
 let quickCaptureWindow;
 
 app.on("ready", () => {
-  quickCaptureWindow = new BrowserWindow({
+  quickCaptureWindow = prepareQuickCaptureWindow();
+
+  quickCaptureWindow.webContents.on("did-finish-load", () => {
+    globalShortcut.register(settings.quickCaptureKey, () => {
+      quickCaptureWindow.show();
+    });
+  });
+});
+
+app.on("will-quit", () => {
+  globalShortcut.unregisterAll();
+});
+
+function prepareQuickCaptureWindow() {
+  const window = new BrowserWindow({
     width: 640,
     height: 240,
     frame: false,
@@ -21,25 +39,16 @@ app.on("ready", () => {
     },
     show: false,
   });
+  openLinksWithDefaultBrowser(window);
 
-  pageLoader.loadPage(quickCaptureWindow, "quick-capture-view.html");
+  pageLoader.loadPage(window, "quick-capture-view.html");
 
-  quickCaptureWindow.webContents.on("did-finish-load", () => {
-    registerGlobalShortcuts();
-  });
+  return window;
+}
 
-  quickCaptureWindow.webContents.setWindowOpenHandler(({ url }) => {
+function openLinksWithDefaultBrowser(window) {
+  window.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: "deny" };
-  });
-});
-
-app.on("will-quit", () => {
-  globalShortcut.unregisterAll();
-});
-
-function registerGlobalShortcuts() {
-  globalShortcut.register("Shift+F5", () => {
-    quickCaptureWindow.show();
   });
 }
