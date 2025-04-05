@@ -1,8 +1,23 @@
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 
+const INCLUDED_FILES = [
+  // App Root is "", whole app will be ignored if not included
+  "",
+  "/main.js",
+  "/viteDevServer.js",
+  "/package.json",
+];
+
 const config = {
   packagerConfig: {
+    ignore: (file) => {
+      if (file.startsWith("/dist") || INCLUDED_FILES.includes(file)) {
+        return false;
+      }
+
+      return true;
+    },
     overwrite: true,
   },
   rebuildConfig: {},

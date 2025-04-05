@@ -8,7 +8,8 @@ const settings = {
 
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
-    window.loadFile(relativeFilePath),
+    // dist is the output directory for the Vite build
+    window.loadFile(`dist/${relativeFilePath}`),
 };
 
 integrateWithViteDevServer(app, pageLoader);
