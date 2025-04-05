@@ -51,7 +51,7 @@ function prepareQuickCaptureWindow() {
   });
   openLinksWithDefaultBrowser(window);
 
-  pageLoader.loadPage(window, "quick-capture-view.html");
+  pageLoader.loadPage(window, "src/quick-capture-view.html");
 
   return window;
 }
