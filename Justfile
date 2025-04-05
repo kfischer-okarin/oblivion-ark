@@ -16,9 +16,14 @@ fix:
   npx eslint . --fix
 
 [working-directory: 'frontend']
-build:
+build: vite-build
   npx electron-forge package
 
 [working-directory: 'frontend']
-build-debug:
+build-debug: vite-build
   DEBUG=electron-packager npx electron-forge package
+
+[private]
+[working-directory: 'frontend']
+vite-build:
+  npx vite build
