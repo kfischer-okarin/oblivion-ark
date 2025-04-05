@@ -14,3 +14,11 @@ lint:
 [working-directory: 'frontend']
 fix:
   npx eslint . --fix
+
+[working-directory: 'frontend']
+build:
+  npx electron-forge package
+
+[working-directory: 'frontend']
+build-verbose:
+  DEBUG=electron-packager npx electron-forge package
