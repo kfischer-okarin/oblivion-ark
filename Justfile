@@ -20,5 +20,5 @@ build:
   npx electron-forge package
 
 [working-directory: 'frontend']
-build-verbose:
+build-debug:
   DEBUG=electron-packager npx electron-forge package
