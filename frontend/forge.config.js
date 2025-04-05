@@ -4,6 +4,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 export default {
   packagerConfig: {
     asar: true,
+    overwrite: true,
   },
   rebuildConfig: {},
   makers: [],
