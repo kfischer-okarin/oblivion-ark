@@ -44,7 +44,7 @@ function prepareQuickCaptureWindow() {
     height: 240,
     frame: false,
     webPreferences: {
-      devTools: !app.isPackaged,
+      devTools: true,
     },
     show: false,
   });
