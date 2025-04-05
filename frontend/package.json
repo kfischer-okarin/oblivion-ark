@@ -3,7 +3,7 @@
   "productName": "Oblivion Ark",
   "version": "1.0.0",
   "description": "A personal note-taking app",
-  "main": "main.js",
+  "main": "app/main.js",
   "type": "module",
   "author": "Kevin Fischer",
   "license": "MIT",

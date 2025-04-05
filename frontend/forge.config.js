@@ -4,15 +4,18 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 const INCLUDED_FILES = [
   // App Root is "", whole app will be ignored if not included
   "",
-  "/main.js",
-  "/viteDevServer.js",
   "/package.json",
 ];
+
+const INCLUDED_DIRS = ["/app", "/dist"];
 
 const config = {
   packagerConfig: {
     ignore: (file) => {
-      if (file.startsWith("/dist") || INCLUDED_FILES.includes(file)) {
+      if (INCLUDED_DIRS.some((dir) => file.startsWith(dir))) {
+        return false;
+      }
+      if (INCLUDED_FILES.includes(file)) {
         return false;
       }
 
