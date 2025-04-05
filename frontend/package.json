@@ -1,5 +1,6 @@
 {
   "name": "oblivion-ark",
+  "productName": "Oblivion Ark",
   "version": "1.0.0",
   "description": "A personal note-taking app",
   "main": "main.js",
