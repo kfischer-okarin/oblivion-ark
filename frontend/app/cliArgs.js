@@ -17,7 +17,7 @@ const OPTIONS = {
  */
 export function parseCliArgs() {
   const { values } = parseArgs({
-    args: getArgv(),
+    args: getNormalizedCliArgs(),
     options: OPTIONS,
   });
 
@@ -27,7 +27,7 @@ export function parseCliArgs() {
   };
 }
 
-function getArgv() {
+function getNormalizedCliArgs() {
   // Running in dev mode will have ["Electron", "."] as first two args
   if (process.argv[0].endsWith("Electron")) {
     return process.argv.slice(2);
