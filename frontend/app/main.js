@@ -1,10 +1,15 @@
 import { app, globalShortcut, BrowserWindow, shell } from "electron";
-
 import { integrateWithViteDevServer } from "./viteDevServer.js";
+import { initializeLogger } from "./logger.js";
 
 const settings = {
   quickCaptureKey: "Shift+F5",
 };
+
+// Initialize the logger with a custom filename
+const logger = initializeLogger();
+logger.info("-".repeat(80));
+logger.info("Application starting with args:", process.argv);
 
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
@@ -37,6 +42,8 @@ app.on("ready", () => {
 
 app.on("will-quit", () => {
   globalShortcut.unregisterAll();
+  logger.info("Application shutting down");
+  logger.close();
 });
 
 function prepareQuickCaptureWindow() {
