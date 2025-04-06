@@ -2,7 +2,7 @@ import { app, globalShortcut, BrowserWindow, shell } from "electron";
 
 import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
-import { integrateWithViteDevServer } from "./vite.js";
+import { integrateWithVite } from "./vite.js";
 import { startDriverSocketServer } from "./driverSocket.js";
 
 const cliArgs = parseCliArgs();
@@ -18,11 +18,10 @@ const settings = {
 
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
-    // dist is the output directory for the Vite build
-    window.loadFile(`dist/${relativeFilePath}`),
+    window.loadFile(relativeFilePath),
 };
 
-integrateWithViteDevServer(app, pageLoader);
+integrateWithVite(app, pageLoader);
 
 let quickCaptureWindow;
 

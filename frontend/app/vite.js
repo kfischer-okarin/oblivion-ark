@@ -12,8 +12,12 @@ function logWithPrefixBeforeEachLine(string, logFn) {
   lines.forEach((line) => logFn(`${LOG_PREFIX} ${line}`));
 }
 
-function integrateWithViteDevServer(app, pageLoader) {
+function integrateWithVite(app, pageLoader) {
   if (app.isPackaged) {
+    pageLoader.loadPage = async (window, relativeFilePath) => {
+      // dist is the default output directory for Vite
+      await window.loadFile(`dist/${relativeFilePath}`);
+    };
     return;
   }
 
@@ -67,4 +71,4 @@ function integrateWithViteDevServer(app, pageLoader) {
   return emitter;
 }
 
-export { integrateWithViteDevServer };
+export { integrateWithVite };
