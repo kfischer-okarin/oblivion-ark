@@ -1,16 +1,19 @@
 import { app, globalShortcut, BrowserWindow, shell } from "electron";
-import { integrateWithViteDevServer } from "./viteDevServer.js";
+
+import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
+import { integrateWithViteDevServer } from "./viteDevServer.js";
+
+const cliArgs = parseCliArgs();
+
+const logger = initializeLogger();
+logger.info("-".repeat(80));
+logger.info("Application starting with args:", cliArgs);
+logger.info("Production Build:", app.isPackaged);
 
 const settings = {
   quickCaptureKey: "Shift+F5",
 };
-
-// Initialize the logger with a custom filename
-const logger = initializeLogger();
-logger.info("-".repeat(80));
-logger.info("Application starting with args:", process.argv);
-logger.info("Production Build:", app.isPackaged);
 
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
