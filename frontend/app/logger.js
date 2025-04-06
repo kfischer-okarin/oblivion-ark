@@ -4,6 +4,8 @@ import path from "path";
 import { app } from "electron";
 import { DateTime } from "luxon";
 
+export let logger;
+
 /**
  * Initializes and returns a logger with customizable output
  * @param {Object} options - Configuration options
@@ -11,17 +13,26 @@ import { DateTime } from "luxon";
  * @returns {Object} Logger object with info, warn, error, and debug methods
  */
 export function initializeLogger({ filename = "app.log" } = {}) {
+  if (logger) {
+    logger.warn(
+      "Logger already initialized. Returning existing logger instance.",
+    );
+    return logger;
+  }
+
   const logPath = app.getPath("logs");
   const logFilePath = path.join(logPath, filename);
   const logFile = fs.createWriteStream(logFilePath, { flags: "a" });
 
-  return {
+  logger = {
     info: buildLogFunction(logFile, "INFO"),
     warn: buildLogFunction(logFile, "WARN"),
     error: buildLogFunction(logFile, "ERROR"),
     debug: buildLogFunction(logFile, "DEBUG"),
     close: () => logFile.end(),
   };
+
+  return logger;
 }
 
 function buildLogFunction(logFile, level) {
