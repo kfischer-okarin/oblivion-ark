@@ -10,6 +10,7 @@ const settings = {
 const logger = initializeLogger();
 logger.info("-".repeat(80));
 logger.info("Application starting with args:", process.argv);
+logger.info("Production Build:", app.isPackaged);
 
 const pageLoader = {
   loadPage: async (window, relativeFilePath) =>
