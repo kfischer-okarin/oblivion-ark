@@ -31,6 +31,7 @@
     "eslint": "For linting the code",
     "eslint-config-prettier": "For prettier config",
     "eslint-plugin-prettier": "For prettier linting",
+    "luxon": "For date and time manipulation",
     "prettier": "For formatting the code",
     "vite": "For building the frontend"
   },
@@ -39,6 +40,7 @@
     "@codemirror/lang-markdown": "^6.3.2",
     "@codemirror/state": "^6.5.2",
     "@codemirror/theme-one-dark": "^6.1.2",
-    "@codemirror/view": "^6.36.4"
+    "@codemirror/view": "^6.36.4",
+    "luxon": "^3.6.1"
   }
 }
