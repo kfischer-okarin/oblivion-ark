@@ -14,6 +14,8 @@ const OPTIONS = {
 /**
  * Parses command line arguments for the application.
  * @returns {object} Object containing parsed CLI arguments
+ * @property {string} vaultPath - Path to the vault directory
+ * @property {string} driverSocketPath - Path to the driver socket
  */
 export function parseCliArgs() {
   const { values } = parseArgs({
