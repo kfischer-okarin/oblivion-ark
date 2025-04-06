@@ -33,6 +33,7 @@
     "eslint-config-flat-gitignore": "For ignoring files in .gitignore",
     "eslint-config-prettier": "For prettier config",
     "eslint-plugin-prettier": "For prettier linting",
+    "json-rpc-2.0": "For sending inter-process messages",
     "luxon": "For date and time manipulation",
     "prettier": "For formatting the code",
     "vite": "For building the frontend"
@@ -43,6 +44,7 @@
     "@codemirror/state": "^6.5.2",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.36.4",
+    "json-rpc-2.0": "^1.7.0",
     "luxon": "^3.6.1"
   }
 }
