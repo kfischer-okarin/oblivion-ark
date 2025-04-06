@@ -3,6 +3,7 @@ import { app, globalShortcut, BrowserWindow, shell } from "electron";
 import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
 import { integrateWithViteDevServer } from "./viteDevServer.js";
+import { startDriverSocketServer } from "./driverSocket.js";
 
 const cliArgs = parseCliArgs();
 
@@ -24,6 +25,10 @@ const pageLoader = {
 integrateWithViteDevServer(app, pageLoader);
 
 let quickCaptureWindow;
+
+if (cliArgs.driverSocketPath) {
+  startDriverSocketServer(cliArgs.driverSocketPath, app);
+}
 
 app.commands = {
   quickCapture: () => {
