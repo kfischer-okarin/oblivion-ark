@@ -5,6 +5,10 @@ const OPTIONS = {
     type: "string",
     description: "Directory path to the vault location",
   },
+  "driver-socket": {
+    type: "string",
+    description: "Path where a unix socket should be opened to drive the app",
+  },
 };
 
 /**
@@ -19,6 +23,7 @@ export function parseCliArgs() {
 
   return {
     vaultPath: values.vault,
+    driverSocketPath: values["driver-socket"],
   };
 }
 
