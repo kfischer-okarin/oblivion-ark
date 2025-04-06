@@ -1,21 +1,20 @@
 import { parseArgs } from "util";
 
+const OPTIONS = {
+  vault: {
+    type: "string",
+    description: "Directory path to the vault location",
+  },
+};
+
 /**
  * Parses command line arguments for the application.
  * @returns {object} Object containing parsed CLI arguments
  */
 export function parseCliArgs() {
-  const options = {
-    // Define supported command line arguments here
-    vault: {
-      type: "string",
-      description: "Directory path to the vault location",
-    },
-  };
-
   const { values } = parseArgs({
     args: getArgv(),
-    options,
+    options: OPTIONS,
   });
 
   return {
