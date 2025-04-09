@@ -6,6 +6,11 @@ class SubProcess
   ASCII_RED = 31
   ASCII_YELLOW = 33
 
+  def self.execute(cmd, args = [], name:)
+    process = new(cmd, args, name: name)
+    process.wait_until_finished
+  end
+
   def initialize(cmd, args = [], name:)
     _, stdout, stderr, @wait_thread = Open3.popen3(cmd, *args)
 
