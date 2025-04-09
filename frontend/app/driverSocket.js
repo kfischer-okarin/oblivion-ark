@@ -1,11 +1,12 @@
 import { unlinkSync } from "fs";
 import net from "net";
 
-import { JSONRPCServer } from "json-rpc-2.0";
+import { JSONRPCServer, JSONRPCClient } from "json-rpc-2.0";
 
 import { logger } from "./logger.js";
 
 let server;
+let notificationClients = [];
 
 /**
  * Creates a Unix socket server that can receive commands to drive the application
@@ -23,6 +24,7 @@ export function startDriverSocketServer(socketPath, app) {
 
   server = net.createServer((socket) => {
     logger.info("Driver connected");
+    notificationClients.push(buildJSONRPCClientForNotifications(socket));
 
     socket.on("data", async (data) => {
       try {
@@ -78,8 +80,21 @@ function buildJSONRPCServer(app) {
   const server = new JSONRPCServer();
 
   server.addMethod("quickCapture", () => {
-    app.commands.quickCapture();
+    app.commands.quickCapture({
+      onReady: () => {
+        notificationClients.forEach((client) => {
+          client.notify("quickCaptureReady");
+        });
+      },
+    });
   });
 
   return server;
+}
+
+function buildJSONRPCClientForNotifications(socket) {
+  return new JSONRPCClient((message) => {
+    socket.write(JSON.stringify(message));
+    socket.write("\n");
+  });
 }

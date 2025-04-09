@@ -30,8 +30,11 @@ if (cliArgs.driverSocketPath) {
 }
 
 app.commands = {
-  quickCapture: () => {
+  quickCapture: ({ onReady } = {}) => {
     if (quickCaptureWindow) {
+      if (onReady) {
+        quickCaptureWindow.once("focus", onReady);
+      }
       quickCaptureWindow.show();
     }
   },
