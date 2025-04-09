@@ -1,6 +1,8 @@
 import { unlinkSync } from "fs";
 import net from "net";
 
+import { JSONRPCServer } from "json-rpc-2.0";
+
 import { logger } from "./logger.js";
 
 let server;
@@ -17,6 +19,8 @@ export function startDriverSocketServer(socketPath, app) {
     return;
   }
 
+  const jsonRPCServer = buildJSONRPCServer(app);
+
   server = net.createServer((socket) => {
     logger.info("Driver connected");
 
@@ -25,7 +29,10 @@ export function startDriverSocketServer(socketPath, app) {
         const message = JSON.parse(data.toString());
         logger.info("Received driver command:", message);
 
-        handleDriverCommand(message, app);
+        const response = jsonRPCServer.receive(message);
+        if (response) {
+          socket.write(JSON.stringify(response));
+        }
       } catch (error) {
         logger.error("Error processing driver command:", error);
       }
@@ -64,4 +71,14 @@ export function startDriverSocketServer(socketPath, app) {
       server.close();
     });
   });
+}
+
+function buildJSONRPCServer(app) {
+  const server = new JSONRPCServer();
+
+  server.addMethod("quickCapture", () => {
+    app.commands.quickCapture();
+  });
+
+  return server;
 }
