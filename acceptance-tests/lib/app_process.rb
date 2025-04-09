@@ -1,16 +1,23 @@
+require 'forwardable'
 require 'pathname'
 require 'tmpdir'
 require 'socket'
 
 require_relative 'sub_process'
+require_relative 'json_rpc_client'
 
 class AppProcess < SubProcess
+  extend Forwardable
+
+  def_delegators :@json_rpc_client, :send_command, :send_command_and_wait, :wait_for_response
+
   def initialize
     app_executable_path = find_app_executable_path
     @socket_path = prepare_socket_path
     super(app_executable_path, ['--driver-socket', @socket_path], name: 'app')
     wait_until_file_exists @socket_path
     @socket = UNIXSocket.new(@socket_path)
+    @json_rpc_client = JsonRpcClient.new(@socket)
   end
 
   private
