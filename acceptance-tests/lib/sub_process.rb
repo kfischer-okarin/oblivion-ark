@@ -6,13 +6,13 @@ class SubProcess
   ASCII_RED = 31
   ASCII_YELLOW = 33
 
-  def self.execute(cmd, args = [], name:)
-    process = new(cmd, args, name: name)
+  def self.execute(cmd, args = [], name:, env: {})
+    process = new(cmd, args, name: name, env: env)
     process.wait_until_finished
   end
 
-  def initialize(cmd, args = [], name:)
-    _, stdout, stderr, @wait_thread = Open3.popen3(cmd, *args)
+  def initialize(cmd, args = [], name:, env: {})
+    _, stdout, stderr, @wait_thread = Open3.popen3(env, cmd, *args)
 
     forward_output(stdout, $stdout, prefix: colorize("[#{name} stdout] ", ASCII_YELLOW))
     forward_output(stderr, $stderr, prefix: colorize("[#{name} stderr] ", ASCII_RED))
