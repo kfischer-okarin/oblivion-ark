@@ -24,14 +24,15 @@ export function startDriverSocketServer(socketPath, app) {
   server = net.createServer((socket) => {
     logger.info("Driver connected");
 
-    socket.on("data", (data) => {
+    socket.on("data", async (data) => {
       try {
         const message = JSON.parse(data.toString());
         logger.info("Received driver command:", message);
 
-        const response = jsonRPCServer.receive(message);
+        const response = await jsonRPCServer.receive(message);
         if (response) {
           socket.write(JSON.stringify(response));
+          socket.write("\n");
         }
       } catch (error) {
         logger.error("Error processing driver command:", error);
