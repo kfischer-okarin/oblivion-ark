@@ -54,6 +54,22 @@ class JsonRpcClient
     response
   end
 
+  def wait_for_notification(notification_type, timeout: 5)
+    notification = nil
+
+    wait_for("notification of type #{notification_type}", timeout: timeout) do
+      @mutex.synchronize do
+        unless @received_message_queue.empty?
+          notification = @received_message_queue.pop
+          return notification if notification[:method] == notification_type
+        end
+        false
+      end
+    end
+
+    notification
+  end
+
   private
 
   def start_response_reader
@@ -69,7 +85,9 @@ class JsonRpcClient
               end
             else
               # Handle notifications (messages without an id or unexpected responses)
-              @received_message_queue.push(response)
+              @mutex.synchronize do
+                @received_message_queue.push(response)
+              end
             end
           rescue JSON::ParserError => e
             $stderr.puts "Failed to parse JSON response: #{e.message}"

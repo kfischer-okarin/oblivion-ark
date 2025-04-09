@@ -9,7 +9,7 @@ require_relative 'json_rpc_client'
 class AppProcess < SubProcess
   extend Forwardable
 
-  def_delegators :@json_rpc_client, :send_command, :send_command_and_wait, :wait_for_response
+  def_delegators :@json_rpc_client, :send_command, :send_command_and_wait, :wait_for_response, :wait_for_notification
 
   def initialize
     app_executable_path = find_app_executable_path
