@@ -8,6 +8,12 @@ contextBridge.exposeInMainWorld("electron", {
   notifyWindowIsReady: () => WindowReadyEvent.send(ipcRenderer),
 });
 
+ipcRenderer.on("enterText", (_, { text }) => {
+  console.log("Received text to enter:", text);
+
+  simulateTypingInContentEditable(text);
+});
+
 function simulateTypingInContentEditable(text) {
   const selection = window.getSelection();
   const range = selection.getRangeAt(0);

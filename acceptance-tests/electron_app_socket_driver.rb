@@ -35,6 +35,10 @@ class ElectronAppSocketDriver
     @app_process.wait_for_notification('quickCaptureReady')
   end
 
+  def enter_note_text(text)
+    @app_process.send_command_and_wait('enterText', params: {text:})
+  end
+
   def teardown
   end
 end
