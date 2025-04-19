@@ -38,7 +38,9 @@ export function initializeLogger({ filename = "app.log" } = {}) {
 function buildLogFunction(logFile, level) {
   return (...args) => {
     const entry = formatLogEntry(level, ...args);
+    console.log(entry);
     logFile.write(entry);
+    logFile.write("\n");
   };
 }
 
@@ -51,5 +53,5 @@ function formatLogEntry(level, ...args) {
   // Ensure level always fills the same amount of columns (5 characters)
   const paddedLevel = level.padEnd(5, " ");
 
-  return `${timestamp} ${paddedLevel} ${message}\n`;
+  return `${timestamp} ${paddedLevel} ${message}`;
 }
