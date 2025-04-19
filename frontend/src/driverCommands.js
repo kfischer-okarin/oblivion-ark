@@ -1,9 +1,10 @@
 export function defineDriverCommandHandlers(ipcRenderer) {
-  ipcRenderer.on("enterText", (_, { text }) => {
+  ipcRenderer.on("enterText", async (_, { text }) => {
     console.log("Received text to enter:", text);
 
     if (isCodeMirrorEditor(document.activeElement)) {
-      simulateTypingInCodeMirrorEditor(text);
+      await simulateTypingInCodeMirrorEditor(text);
+      ipcRenderer.send("enterTextDone");
     } else {
       throw new Error("Don't know how to enter text in this element");
     }
@@ -15,6 +16,11 @@ function isCodeMirrorEditor(element) {
 }
 
 function simulateTypingInCodeMirrorEditor(text) {
+  let typingPromiseResolve;
+  const typingPromise = new Promise((resolve) => {
+    typingPromiseResolve = resolve;
+  });
+
   let charIndex = 0;
   let lastCharWasNewline = false;
 
@@ -34,10 +40,15 @@ function simulateTypingInCodeMirrorEditor(text) {
     if (charIndex < text.length) {
       const typingDelay = 20 + Math.floor(Math.random() * 20);
       setTimeout(typeNextCharacter, typingDelay);
+    } else {
+      // Resolve the promise when typing is done
+      typingPromiseResolve();
     }
   }
 
   typeNextCharacter();
+
+  return typingPromise;
 }
 
 function typeCharacter(char) {
