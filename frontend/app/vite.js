@@ -23,38 +23,34 @@ function integrateWithVite(app, pageLoader) {
   }
 
   const emitter = new EventEmitter();
-  let viteProcess;
+  const viteProcess = spawn("npx", ["vite"], {
+    shell: true,
+    env: {
+      ...process.env,
+      FORCE_COLOR: "1", // Vite defaults to no color in non-TTY environments
+    },
+    stdio: [
+      "ignore", // stdin
+      "pipe", // stdout
+      "pipe", // stderr
+    ],
+  });
 
-  app.on("ready", () => {
-    viteProcess = spawn("npx", ["vite"], {
-      shell: true,
-      env: {
-        ...process.env,
-        FORCE_COLOR: "1", // Vite defaults to no color in non-TTY environments
-      },
-      stdio: [
-        "ignore", // stdin
-        "pipe", // stdout
-        "pipe", // stderr
-      ],
-    });
+  viteProcess.stdout.on("data", (data) => {
+    const output = data.toString();
+    logWithPrefixBeforeEachLine(output, console.log);
 
-    viteProcess.stdout.on("data", (data) => {
-      const output = data.toString();
-      logWithPrefixBeforeEachLine(output, console.log);
+    if (/VITE.+ready/.test(output)) {
+      emitter.emit("ready");
+    }
+  });
 
-      if (/VITE.+ready/.test(output)) {
-        emitter.emit("ready");
-      }
-    });
+  viteProcess.stderr.on("data", (data) => {
+    logWithPrefixBeforeEachLine(data, console.error);
+  });
 
-    viteProcess.stderr.on("data", (data) => {
-      logWithPrefixBeforeEachLine(data, console.error);
-    });
-
-    viteProcess.on("error", (error) => {
-      console.error(`${LOG_PREFIX} Error starting Vite: ${error}`);
-    });
+  viteProcess.on("error", (error) => {
+    console.error(`${LOG_PREFIX} Error starting Vite: ${error}`);
   });
 
   app.on("will-quit", () => {
