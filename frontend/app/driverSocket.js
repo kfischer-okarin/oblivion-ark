@@ -1,7 +1,12 @@
 import { unlinkSync } from "fs";
 import net from "net";
 
-import { JSONRPCServer, JSONRPCClient } from "json-rpc-2.0";
+import { BrowserWindow } from "electron";
+import {
+  JSONRPCServer,
+  JSONRPCClient,
+  JSONRPCErrorException,
+} from "json-rpc-2.0";
 
 import { logger } from "./logger.js";
 
@@ -89,7 +94,27 @@ function buildJSONRPCServer(app) {
     });
   });
 
+  server.addMethod("enterText", (text) => {
+    const window = getFocusedWindow();
+    window.webContents.send("enterText", text);
+  });
+
   return server;
+}
+
+const ERROR_CODES = {
+  NO_FOCUSED_WINDOW: -32000,
+};
+
+function getFocusedWindow() {
+  const window = BrowserWindow.getFocusedWindow();
+  if (!window) {
+    throw new JSONRPCErrorException(
+      "No focused window",
+      ERROR_CODES.NO_FOCUSED_WINDOW,
+    );
+  }
+  return window;
 }
 
 function buildJSONRPCClientForNotifications(socket) {
