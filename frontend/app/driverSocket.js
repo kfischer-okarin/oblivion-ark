@@ -1,7 +1,7 @@
 import { unlinkSync } from "fs";
 import net from "net";
 
-import { BrowserWindow } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 import {
   JSONRPCServer,
   JSONRPCClient,
@@ -97,6 +97,12 @@ function buildJSONRPCServer(app) {
   server.addMethod("enterText", (text) => {
     const window = getFocusedWindow();
     window.webContents.send("enterText", text);
+
+    ipcMain.once("enterTextDone", () => {
+      notificationClients.forEach((client) => {
+        client.notify("enterTextDone");
+      });
+    });
   });
 
   return server;
