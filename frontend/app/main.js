@@ -28,7 +28,7 @@ const pageLoader = {
     resolve(__dirname, "..", pathFromProjectRoot),
 };
 
-integrateWithVite(app, pageLoader);
+await integrateWithVite(app, pageLoader);
 
 let quickCaptureWindow;
 

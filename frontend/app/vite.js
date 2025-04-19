@@ -1,24 +1,10 @@
 import { spawn } from "child_process";
-import { EventEmitter } from "events";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-function listenForViteReady(viteProcess, emitter) {
-  const onStdoutData = (data) => {
-    const output = data.toString();
-
-    if (/VITE.+ready/.test(output)) {
-      emitter.emit("ready");
-      viteProcess.stdout.removeListener("data", onStdoutData);
-    }
-  };
-
-  viteProcess.stdout.on("data", onStdoutData);
-}
-
-function integrateWithVite(app, pageLoader) {
+async function integrateWithVite(app, pageLoader) {
   if (app.isPackaged) {
     // dist is the default output directory for Vite
     pageLoader.loadPage = async (window, pathFromProjectRoot) => {
@@ -29,7 +15,6 @@ function integrateWithVite(app, pageLoader) {
     return;
   }
 
-  const emitter = new EventEmitter();
   const viteProcess = spawn("npx", ["vite"], {
     shell: true,
     env: {
@@ -50,22 +35,17 @@ function integrateWithVite(app, pageLoader) {
     console.error(`${LOG_PREFIX} Error starting Vite: ${error}`);
   });
 
-  listenForViteReady(viteProcess, emitter);
-
   app.on("will-quit", () => {
     if (viteProcess) {
       viteProcess.kill();
     }
   });
 
-  pageLoader.loadPage = async (window, pathFromProjectRoot) => {
-    emitter.once("ready", () => {
-      window.loadURL(`http://localhost:5173/${pathFromProjectRoot}`);
-    });
-  };
-  // TODO: Also hot-reload the preload script
+  await waitUntilViteIsReady(viteProcess);
 
-  return emitter;
+  pageLoader.loadPage = async (window, pathFromProjectRoot) =>
+    window.loadURL(`http://localhost:5173/${pathFromProjectRoot}`);
+  // TODO: Also hot-reload the preload script
 }
 
 const LOG_PREFIX = "\x1b[32m[VITE]\x1b[0m";
@@ -78,6 +58,22 @@ function forwardStreamLinesWithPrefix(stream, prefix, lineFn) {
     }
 
     lines.forEach((line) => lineFn(`${prefix} ${line}`));
+  });
+}
+
+function waitUntilViteIsReady(viteProcess) {
+  return new Promise((resolve) => {
+    const resolveWhenReadyLogWasEmitted = (data) => {
+      if (/VITE.+ready/.test(data.toString())) {
+        viteProcess.stdout.removeListener(
+          "data",
+          resolveWhenReadyLogWasEmitted,
+        );
+        resolve();
+      }
+    };
+
+    viteProcess.stdout.on("data", resolveWhenReadyLogWasEmitted);
   });
 }
 
