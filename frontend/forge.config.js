@@ -7,7 +7,7 @@ const INCLUDED_FILES = [
   "/package.json",
 ];
 
-const INCLUDED_DIRS = ["/app", "/dist"];
+const INCLUDED_DIRS = ["/app", "/dist", "/lib"];
 
 const config = {
   packagerConfig: {
