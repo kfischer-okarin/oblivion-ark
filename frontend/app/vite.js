@@ -5,17 +5,6 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const LOG_PREFIX = "\x1b[32m[VITE]\x1b[0m";
-
-function logWithPrefixBeforeEachLine(string, logFn) {
-  const lines = string.toString().split("\n");
-  if (lines[lines.length - 1] === "") {
-    lines.pop();
-  }
-
-  lines.forEach((line) => logFn(`${LOG_PREFIX} ${line}`));
-}
-
 function listenForViteReady(viteProcess, emitter) {
   const onStdoutData = (data) => {
     const output = data.toString();
@@ -54,14 +43,8 @@ function integrateWithVite(app, pageLoader) {
     ],
   });
 
-  viteProcess.stdout.on("data", (data) => {
-    const output = data.toString();
-    logWithPrefixBeforeEachLine(output, console.log);
-  });
-
-  viteProcess.stderr.on("data", (data) => {
-    logWithPrefixBeforeEachLine(data, console.error);
-  });
+  forwardStreamLinesWithPrefix(viteProcess.stdout, LOG_PREFIX, console.log);
+  forwardStreamLinesWithPrefix(viteProcess.stderr, LOG_PREFIX, console.error);
 
   viteProcess.on("error", (error) => {
     console.error(`${LOG_PREFIX} Error starting Vite: ${error}`);
@@ -83,6 +66,19 @@ function integrateWithVite(app, pageLoader) {
   // TODO: Also hot-reload the preload script
 
   return emitter;
+}
+
+const LOG_PREFIX = "\x1b[32m[VITE]\x1b[0m";
+
+function forwardStreamLinesWithPrefix(stream, prefix, lineFn) {
+  stream.on("data", (data) => {
+    const lines = data.toString().split("\n");
+    if (lines[lines.length - 1] === "") {
+      lines.pop();
+    }
+
+    lines.forEach((line) => lineFn(`${prefix} ${line}`));
+  });
 }
 
 export { integrateWithVite };
