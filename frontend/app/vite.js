@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import { EventEmitter } from "events";
+import { join } from "path";
 
 const LOG_PREFIX = "\x1b[32m[VITE]\x1b[0m";
 
@@ -14,9 +15,9 @@ function logWithPrefixBeforeEachLine(string, logFn) {
 
 function integrateWithVite(app, pageLoader) {
   if (app.isPackaged) {
-    pageLoader.loadPage = async (window, relativeFilePath) => {
+    pageLoader.loadPage = async (window, pathFromProjectRoot) => {
       // dist is the default output directory for Vite
-      await window.loadFile(`dist/${relativeFilePath}`);
+      await window.loadFile(join("dist", pathFromProjectRoot));
     };
     return;
   }
@@ -62,9 +63,9 @@ function integrateWithVite(app, pageLoader) {
     }
   });
 
-  pageLoader.loadPage = async (window, relativeFilePath) => {
+  pageLoader.loadPage = async (window, pathFromProjectRoot) => {
     emitter.once("ready", () => {
-      window.loadURL(`http://localhost:5173/${relativeFilePath}`);
+      window.loadURL(`http://localhost:5173/${pathFromProjectRoot}`);
     });
   };
 

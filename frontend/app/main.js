@@ -17,8 +17,8 @@ const settings = {
 };
 
 const pageLoader = {
-  loadPage: async (window, relativeFilePath) =>
-    window.loadFile(relativeFilePath),
+  loadPage: async (window, pathFromProjectRoot) =>
+    window.loadFile(pathFromProjectRoot),
 };
 
 integrateWithVite(app, pageLoader);
