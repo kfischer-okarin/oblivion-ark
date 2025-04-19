@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 
 import { app, BrowserWindow, globalShortcut, ipcMain, shell } from "electron";
 
+import { WindowReadyEvent } from "../lib/rendererEvents.js";
 import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
 import { integrateWithVite } from "./vite.js";
@@ -16,6 +17,8 @@ const logger = initializeLogger();
 logger.info("-".repeat(80));
 logger.info("Application starting with args:", cliArgs);
 logger.info("Production Build:", app.isPackaged);
+
+WindowReadyEvent.logEvents(ipcMain, logger);
 
 const settings = {
   quickCaptureKey: "Shift+F5",
@@ -40,7 +43,7 @@ app.commands = {
   quickCapture: ({ onReady } = {}) => {
     if (quickCaptureWindow) {
       if (onReady) {
-        ipcMain.once("windowReady", onReady);
+        WindowReadyEvent.onNextEvent(ipcMain, onReady);
       }
       quickCaptureWindow.show();
     }
