@@ -1,9 +1,14 @@
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+
 import { app, globalShortcut, BrowserWindow, shell } from "electron";
 
 import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
 import { integrateWithVite } from "./vite.js";
 import { startDriverSocketServer } from "./driverSocket.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const cliArgs = parseCliArgs();
 
@@ -19,6 +24,8 @@ const settings = {
 const pageLoader = {
   loadPage: async (window, pathFromProjectRoot) =>
     window.loadFile(pathFromProjectRoot),
+  preloadScriptPath: (pathFromProjectRoot) =>
+    resolve(__dirname, "..", pathFromProjectRoot),
 };
 
 integrateWithVite(app, pageLoader);
