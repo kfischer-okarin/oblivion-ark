@@ -1,7 +1,7 @@
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
-import { app, globalShortcut, BrowserWindow, shell } from "electron";
+import { app, BrowserWindow, globalShortcut, ipcMain, shell } from "electron";
 
 import { parseCliArgs } from "./cliArgs.js";
 import { initializeLogger } from "./logger.js";
@@ -40,7 +40,7 @@ app.commands = {
   quickCapture: ({ onReady } = {}) => {
     if (quickCaptureWindow) {
       if (onReady) {
-        quickCaptureWindow.once("focus", onReady);
+        ipcMain.once("windowReady", onReady);
       }
       quickCaptureWindow.show();
     }
@@ -71,6 +71,9 @@ function prepareQuickCaptureWindow() {
     frame: false,
     webPreferences: {
       devTools: true,
+      preload: pageLoader.preloadScriptPath(
+        "src/quick-capture-view-preload.js",
+      ),
     },
     show: false,
   });

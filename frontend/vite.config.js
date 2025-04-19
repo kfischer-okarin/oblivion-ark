@@ -30,6 +30,10 @@ export default defineConfig({
       },
       input: {
         quickCaptureView: resolve(__dirname, "src/quick-capture-view.html"),
+        quickCaptureViewPreload: resolve(
+          __dirname,
+          "src/quick-capture-view-preload.js",
+        ),
       },
     },
   },
