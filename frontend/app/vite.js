@@ -16,6 +16,19 @@ function logWithPrefixBeforeEachLine(string, logFn) {
   lines.forEach((line) => logFn(`${LOG_PREFIX} ${line}`));
 }
 
+function listenForViteReady(viteProcess, emitter) {
+  const onStdoutData = (data) => {
+    const output = data.toString();
+
+    if (/VITE.+ready/.test(output)) {
+      emitter.emit("ready");
+      viteProcess.stdout.removeListener("data", onStdoutData);
+    }
+  };
+
+  viteProcess.stdout.on("data", onStdoutData);
+}
+
 function integrateWithVite(app, pageLoader) {
   if (app.isPackaged) {
     // dist is the default output directory for Vite
@@ -44,10 +57,6 @@ function integrateWithVite(app, pageLoader) {
   viteProcess.stdout.on("data", (data) => {
     const output = data.toString();
     logWithPrefixBeforeEachLine(output, console.log);
-
-    if (/VITE.+ready/.test(output)) {
-      emitter.emit("ready");
-    }
   });
 
   viteProcess.stderr.on("data", (data) => {
@@ -57,6 +66,8 @@ function integrateWithVite(app, pageLoader) {
   viteProcess.on("error", (error) => {
     console.error(`${LOG_PREFIX} Error starting Vite: ${error}`);
   });
+
+  listenForViteReady(viteProcess, emitter);
 
   app.on("will-quit", () => {
     if (viteProcess) {
