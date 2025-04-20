@@ -56,19 +56,19 @@ class RpcClientGenerator
     result_parts.join
   end
 
-  def class_name
-    camel_case(@spec[:info][:title]) + 'Client'
-  end
-
   def filename
     "#{snake_case(class_name)}.rb"
+  end
+
+  private
+
+  def class_name
+    camel_case(@spec[:info][:title]) + 'Client'
   end
 
   def relative_spec_path
     @openrpc_spec_path.relative_path_from(Pathname.new(__dir__).join('..'))
   end
-
-  private
 
   def camel_case(str)
     str.split(/\s+/).map(&:capitalize).join
