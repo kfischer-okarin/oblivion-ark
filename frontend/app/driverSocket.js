@@ -1,5 +1,6 @@
 import { unlinkSync } from "fs";
 import net from "net";
+import { basename } from "path";
 
 import { BrowserWindow, ipcMain } from "electron";
 import {
@@ -37,6 +38,19 @@ export function startDriverSocketServer(socketPath, app) {
   app.on("startup-finished", () => {
     notificationClients.forEach((client) => {
       client.notify("startupFinished");
+    });
+  });
+
+  app.on("browser-window-created", (_, window) => {
+    let page;
+    window.webContents.on("did-finish-load", () => {
+      page = basename(window.webContents.getURL());
+    });
+
+    window.on("show", () => {
+      notificationClients.forEach((client) => {
+        client.notify("windowShown", { id: window.id, page });
+      });
     });
   });
 

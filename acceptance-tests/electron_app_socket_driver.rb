@@ -33,7 +33,7 @@ class ElectronAppSocketDriver
 
   def start_capture_note
     @app_process.send_command_and_wait('quickCapture')
-    @app_process.wait_for_notification('windowReady')
+    @app_process.wait_for_notification('windowShown') # TODO: Match page
   end
 
   def enter_note_text(text)
