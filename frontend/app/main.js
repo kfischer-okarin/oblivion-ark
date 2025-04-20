@@ -79,7 +79,9 @@ function prepareQuickCaptureWindow() {
       preload: pageLoader.preloadScriptPath(
         "src/quick-capture-view-preload.js",
       ),
-      additionalArguments: additionalRendererArguments(),
+      additionalArguments: additionalRendererArguments({
+        windowId: "quickCapture",
+      }),
     },
     show: false,
   });
