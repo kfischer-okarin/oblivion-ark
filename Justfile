@@ -15,6 +15,9 @@ lint:
 fix:
   npx eslint . --fix
 
+generate-classes:
+  ruby scripts/generate_rpc_client.rb
+
 [working-directory: 'frontend']
 build: vite-build
   npx electron-forge package

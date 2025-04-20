@@ -1,0 +1,29 @@
+# This file is auto-generated. Do not edit it manually.
+# Generated from OpenRPC spec at frontend/driver.openrpc.json
+# frozen_string_literal: true
+
+class ElectronAppDriverProtocolClient
+  def initialize(json_rpc_client)
+    @json_rpc_client = json_rpc_client
+  end
+
+  def trigger_global_shortcut(accelerator:)
+    @json_rpc_client.send_command_and_wait("triggerGlobalShortcut", params: {accelerator:})
+  end
+
+  def enter_text(text:)
+    @json_rpc_client.send_command_and_wait("enterText", params: {text:})
+  end
+
+  def wait_for_startup_finished(timeout: 5)
+    @json_rpc_client.wait_for_notification("startupFinished", timeout:)
+  end
+
+  def wait_for_window_shown(timeout: 5)
+    @json_rpc_client.wait_for_notification("windowShown", timeout:)
+  end
+
+  def wait_for_enter_text_done(timeout: 5)
+    @json_rpc_client.wait_for_notification("enterTextDone", timeout:)
+  end
+end
