@@ -47,6 +47,7 @@ class JsonRpcClient
     wait_for("response to request #{request_id}", timeout: timeout) do
       @mutex.synchronize do
         response = @pending_requests[request_id]
+        puts "Received response: #{response.inspect}" if response
         @pending_requests.delete(request_id) if response # delete will return the response
       end
     end
