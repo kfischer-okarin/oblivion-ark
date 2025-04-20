@@ -9,17 +9,10 @@ import {
   JSONRPCErrorException,
 } from "json-rpc-2.0";
 
-import { WindowReadyEvent } from "../lib/rendererEvents.js";
 import { logger } from "./logger.js";
 
 let server;
 let notificationClients = [];
-
-WindowReadyEvent.addListener(ipcMain, (_, { id }) => {
-  notificationClients.forEach((client) => {
-    client.notify("windowReady", { id });
-  });
-});
 
 /**
  * Creates a Unix socket server that can receive commands to drive the application
