@@ -1,5 +1,5 @@
 export function defineDriverCommandHandlers(ipcRenderer) {
-  ipcRenderer.on("enterText", async (_, { text }) => {
+  ipcRenderer.on("enterText", async (_, text) => {
     console.log("Received text to enter:", text);
 
     if (isCodeMirrorEditor(document.activeElement)) {

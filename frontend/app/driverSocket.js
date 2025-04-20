@@ -95,7 +95,7 @@ function buildJSONRPCServer(app) {
     app.commands.quickCapture();
   });
 
-  server.addMethod("enterText", (text) => {
+  server.addMethod("enterText", ({ text }) => {
     const window = getFocusedWindow();
     window.webContents.send("enterText", text);
 
