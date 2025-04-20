@@ -105,9 +105,9 @@ export function startDriverSocketServer(socketPath, app) {
 function buildJSONRPCServer(app) {
   const server = new JSONRPCServer();
 
-  server.addMethod("triggerGlobalShortcut", ({ accelerator }) => {
-    triggerGlobalShortcut(accelerator);
-  });
+  server.addMethod("triggerGlobalShortcut", ({ accelerator }) =>
+    triggerGlobalShortcut(accelerator),
+  );
 
   server.addMethod("enterText", ({ text }) => {
     const window = getFocusedWindow();

@@ -27,7 +27,9 @@ export function triggerGlobalShortcut(accelerator) {
   const callback = registeredShortcuts.get(accelerator);
   if (callback) {
     callback();
+    return true;
   }
+  return false;
 }
 
 export function unregisterAllGlobalShortcuts() {
