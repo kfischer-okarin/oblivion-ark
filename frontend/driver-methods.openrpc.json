@@ -1,0 +1,53 @@
+{
+  "openrpc": "1.3.2",
+  "info": {
+    "title": "Electron App Driver Protocol",
+    "description": "Protocol for driving an Electron application via socket for testing purposes",
+    "version": "1.0.0"
+  },
+  "methods": [
+    {
+      "name": "triggerGlobalShortcut",
+      "description": "Trigger a global keyboard shortcut in the application",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "accelerator",
+          "description": "Shortcut key combination (e.g., 'Shift+F5')",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "result",
+        "description": "true if the shortcut was registered and triggered successfully",
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
+    {
+      "name": "enterText",
+      "description": "Enter text into the currently focused element",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "text",
+          "description": "Text to enter",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "type": "null"
+        }
+      }
+    }
+  ]
+}
