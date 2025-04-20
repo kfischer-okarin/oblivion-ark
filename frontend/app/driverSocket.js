@@ -9,6 +9,7 @@ import {
   JSONRPCErrorException,
 } from "json-rpc-2.0";
 
+import { triggerGlobalShortcut } from "./globalShortcuts.js";
 import { logger } from "./logger.js";
 
 let server;
@@ -104,8 +105,8 @@ export function startDriverSocketServer(socketPath, app) {
 function buildJSONRPCServer(app) {
   const server = new JSONRPCServer();
 
-  server.addMethod("quickCapture", () => {
-    app.commands.quickCapture();
+  server.addMethod("triggerGlobalShortcut", ({ accelerator }) => {
+    triggerGlobalShortcut(accelerator);
   });
 
   server.addMethod("enterText", ({ text }) => {

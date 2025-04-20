@@ -23,6 +23,13 @@ export function unregisterGlobalShortcut(accelerator) {
   }
 }
 
+export function triggerGlobalShortcut(accelerator) {
+  const callback = registeredShortcuts.get(accelerator);
+  if (callback) {
+    callback();
+  }
+}
+
 export function unregisterAllGlobalShortcuts() {
   globalShortcut.unregisterAll();
   registeredShortcuts.clear();

@@ -32,7 +32,7 @@ class ElectronAppSocketDriver
   end
 
   def start_capture_note
-    @app_process.send_command_and_wait('quickCapture')
+    @app_process.send_command_and_wait('triggerGlobalShortcut', params: {accelerator: 'Shift+F5'})
     @app_process.wait_for_notification('windowShown') # TODO: Match page
   end
 
