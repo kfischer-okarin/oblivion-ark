@@ -79,7 +79,7 @@ function prepareQuickCaptureWindow() {
       preload: pageLoader.preloadScriptPath(
         "src/quick-capture-view-preload.js",
       ),
-      additionalArguments: [JSON.stringify(commonPreloadArguments)],
+      additionalArguments: additionalRendererArguments(),
     },
     show: false,
   });
@@ -95,4 +95,8 @@ function openLinksWithDefaultBrowser(window) {
     shell.openExternal(url);
     return { action: "deny" };
   });
+}
+
+function additionalRendererArguments(values = {}) {
+  return [JSON.stringify({ ...commonPreloadArguments, ...values })];
 }
