@@ -53,12 +53,10 @@ app.commands = {
   },
 };
 
-app.on("ready", () => {
-  quickCaptureWindow = prepareQuickCaptureWindow();
+app.on("ready", async () => {
+  quickCaptureWindow = await prepareQuickCaptureWindow();
 
-  quickCaptureWindow.webContents.on("did-finish-load", () => {
-    registerGlobalShortcut(settings.quickCaptureKey, app.commands.quickCapture);
-  });
+  registerGlobalShortcut(settings.quickCaptureKey, app.commands.quickCapture);
 });
 
 app.on("will-quit", () => {
@@ -67,7 +65,7 @@ app.on("will-quit", () => {
   logger.close();
 });
 
-function prepareQuickCaptureWindow() {
+async function prepareQuickCaptureWindow() {
   const window = new BrowserWindow({
     width: 640,
     height: 240,
@@ -85,7 +83,7 @@ function prepareQuickCaptureWindow() {
   });
   openLinksWithDefaultBrowser(window);
 
-  pageLoader.loadPage(window, "src/quick-capture-view.html");
+  await pageLoader.loadPage(window, "src/quick-capture-view.html");
 
   return window;
 }
