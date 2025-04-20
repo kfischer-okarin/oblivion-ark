@@ -28,6 +28,7 @@ class ElectronAppSocketDriver
 
   def initialize
     @app_process = self.class.app_process
+    @app_process.wait_for_notification('startupFinished')
   end
 
   def start_capture_note

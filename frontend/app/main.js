@@ -57,6 +57,7 @@ app.on("ready", async () => {
   quickCaptureWindow = await prepareQuickCaptureWindow();
 
   registerGlobalShortcut(settings.quickCaptureKey, app.commands.quickCapture);
+  app.emit("startup-finished");
 });
 
 app.on("will-quit", () => {

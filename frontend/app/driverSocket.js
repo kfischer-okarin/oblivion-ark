@@ -34,6 +34,12 @@ export function startDriverSocketServer(socketPath, app) {
 
   const jsonRPCServer = buildJSONRPCServer(app);
 
+  app.on("startup-finished", () => {
+    notificationClients.forEach((client) => {
+      client.notify("startupFinished");
+    });
+  });
+
   server = net.createServer((socket) => {
     logger.info("Driver connected");
     notificationClients.push(buildJSONRPCClientForNotifications(socket));
