@@ -61,6 +61,7 @@ class JsonRpcClient
       @mutex.synchronize do
         unless @received_message_queue.empty?
           notification = @received_message_queue.pop
+          puts "Received notification: #{notification.inspect}"
           return notification if notification[:method] == notification_type
         end
         false
