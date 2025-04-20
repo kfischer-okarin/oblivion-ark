@@ -1,4 +1,6 @@
 require_relative 'lib/app_process'
+require_relative 'lib/electron_app_driver_protocol_client'
+require_relative 'lib/json_rpc_client'
 
 class ElectronAppSocketDriver
   class << self
@@ -28,17 +30,20 @@ class ElectronAppSocketDriver
 
   def initialize
     @app_process = self.class.app_process
-    @app_process.wait_for_notification('startupFinished')
+    @driver_client = ElectronAppDriverProtocolClient.new(
+      JsonRpcClient.new(@app_process.driver_socket)
+    )
+    @driver_client.wait_for_startup_finished
   end
 
   def start_capture_note
-    @app_process.send_command_and_wait('triggerGlobalShortcut', params: {accelerator: 'Shift+F5'})
-    @app_process.wait_for_notification('windowShown') # TODO: Match page
+    @driver_client.trigger_global_shortcut(accelerator: 'Shift+F5')
+    @driver_client.wait_for_window_shown # TODO: Match page
   end
 
   def enter_note_text(text)
-    @app_process.send_command_and_wait('enterText', params: {text:})
-    @app_process.wait_for_notification('enterTextDone')
+    @driver_client.enter_text(text:)
+    @driver_client.wait_for_enter_text_done
   end
 
   def teardown
