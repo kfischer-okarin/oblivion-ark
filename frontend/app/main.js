@@ -42,11 +42,8 @@ if (cliArgs.driverSocketPath) {
 }
 
 app.commands = {
-  quickCapture: ({ onReady } = {}) => {
+  quickCapture: () => {
     if (quickCaptureWindow) {
-      if (onReady) {
-        WindowReadyEvent.onNextEvent(ipcMain, onReady);
-      }
       quickCaptureWindow.show();
     }
   },

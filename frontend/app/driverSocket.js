@@ -92,13 +92,7 @@ function buildJSONRPCServer(app) {
   const server = new JSONRPCServer();
 
   server.addMethod("quickCapture", () => {
-    app.commands.quickCapture({
-      onReady: () => {
-        notificationClients.forEach((client) => {
-          client.notify("quickCaptureReady");
-        });
-      },
-    });
+    app.commands.quickCapture();
   });
 
   server.addMethod("enterText", (text) => {
