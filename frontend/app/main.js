@@ -34,11 +34,11 @@ const pageLoader = {
 await integrateWithVite(app, pageLoader);
 
 let quickCaptureWindow;
-const preloadArguments = [];
+const commonPreloadArguments = {};
 
 if (cliArgs.driverSocketPath) {
   startDriverSocketServer(cliArgs.driverSocketPath, app);
-  preloadArguments.push("driverActive");
+  commonPreloadArguments.driverActive = true;
 }
 
 app.commands = {
@@ -79,7 +79,7 @@ function prepareQuickCaptureWindow() {
       preload: pageLoader.preloadScriptPath(
         "src/quick-capture-view-preload.js",
       ),
-      additionalArguments: preloadArguments,
+      additionalArguments: [JSON.stringify(commonPreloadArguments)],
     },
     show: false,
   });

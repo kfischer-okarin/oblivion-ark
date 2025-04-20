@@ -9,7 +9,8 @@ contextBridge.exposeInMainWorld("electron", {
   notifyWindowIsReady: () => WindowReadyEvent.send(ipcRenderer),
 });
 
-if (process.argv.includes("driverActive")) {
+const argFromMainProcess = JSON.parse(process.argv[process.argv.length - 1]);
+if (argFromMainProcess.driverActive) {
   console.log("Connected to driver socket");
   defineDriverCommandHandlers(ipcRenderer);
 }
