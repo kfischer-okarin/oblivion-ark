@@ -1,0 +1,42 @@
+{
+  "openrpc": "1.3.2",
+  "info": {
+    "title": "Electron App Driver Notifications Protocol",
+    "description": "Protocol for notifications sent from the Electron application to connected test drivers",
+    "version": "1.0.0"
+  },
+  "methods": [
+    {
+      "name": "startupFinished",
+      "description": "Sent when the application has completed its startup process",
+      "params": []
+    },
+    {
+      "name": "windowShown",
+      "description": "Sent when a browser window becomes visible",
+      "params": [
+        {
+          "name": "id",
+          "description": "The window id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true
+        },
+        {
+          "name": "page",
+          "description": "The name of the HTML file being displayed in the window",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "enterTextDone",
+      "description": "Sent when text entry triggered by the enterText method has been completed",
+      "params": []
+    }
+  ]
+}
