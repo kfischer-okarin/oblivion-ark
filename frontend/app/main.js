@@ -1,13 +1,17 @@
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
-import { app, BrowserWindow, globalShortcut, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
 
 import { WindowReadyEvent } from "../lib/rendererEvents.js";
 import { parseCliArgs } from "./cliArgs.js";
+import { startDriverSocketServer } from "./driverSocket.js";
+import {
+  registerGlobalShortcut,
+  unregisterAllGlobalShortcuts,
+} from "./globalShortcuts.js";
 import { initializeLogger } from "./logger.js";
 import { integrateWithVite } from "./vite.js";
-import { startDriverSocketServer } from "./driverSocket.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -53,15 +57,12 @@ app.on("ready", () => {
   quickCaptureWindow = prepareQuickCaptureWindow();
 
   quickCaptureWindow.webContents.on("did-finish-load", () => {
-    globalShortcut.register(
-      settings.quickCaptureKey,
-      app.commands.quickCapture,
-    );
+    registerGlobalShortcut(settings.quickCaptureKey, app.commands.quickCapture);
   });
 });
 
 app.on("will-quit", () => {
-  globalShortcut.unregisterAll();
+  unregisterAllGlobalShortcuts();
   logger.info("Application shutting down");
   logger.close();
 });
