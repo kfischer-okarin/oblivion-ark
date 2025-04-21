@@ -12,8 +12,8 @@ lint:
   npx eslint .
 
 [working-directory: 'frontend']
-fix:
-  npx eslint . --fix
+fix files="":
+  npx eslint . --fix {{files}}
 
 generate-classes:
   ruby scripts/generate_rpc_client.rb
