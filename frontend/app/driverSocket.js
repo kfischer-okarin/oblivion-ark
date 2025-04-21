@@ -4,9 +4,10 @@ import { basename } from "path";
 
 import { BrowserWindow, ipcMain } from "electron";
 import {
-  JSONRPCServer,
   JSONRPCClient,
   JSONRPCErrorException,
+  JSONRPCServer,
+  JSONRPCServerAndClient,
 } from "json-rpc-2.0";
 
 import { triggerGlobalShortcut } from "./globalShortcuts.js";
@@ -26,8 +27,6 @@ export function startDriverSocketServer(socketPath, app) {
     logger.warn("Driver socket server already running. Doing nothing.");
     return;
   }
-
-  const jsonRPCServer = buildJSONRPCServer(app);
 
   app.on("startup-finished", () => {
     notificationClients.forEach((client) => {
@@ -50,22 +49,25 @@ export function startDriverSocketServer(socketPath, app) {
 
   socketServer = net.createServer((socket) => {
     logger.info("Driver connected");
-    notificationClients.push(buildJSONRPCClientForNotifications(socket));
 
-    socket.on("data", async (data) => {
-      try {
-        const message = JSON.parse(data.toString());
-        logger.info("Received driver command:", message);
+    const server = buildJSONRPCServer(socket);
 
-        const response = await jsonRPCServer.receive(message);
-        if (response) {
-          socket.write(JSON.stringify(response));
-          socket.write("\n");
-        }
-      } catch (error) {
-        logger.error("Error processing driver command:", error);
-      }
+    server.addMethod("triggerGlobalShortcut", ({ accelerator }) =>
+      triggerGlobalShortcut(accelerator),
+    );
+
+    server.addMethod("enterText", ({ text }) => {
+      const window = getFocusedWindow();
+      window.webContents.send("enterText", text);
+
+      ipcMain.once("enterTextDone", () => {
+        notificationClients.forEach((client) => {
+          client.notify("enterTextDone");
+        });
+      });
     });
+
+    notificationClients.push(server);
 
     socket.on("error", (error) => {
       logger.error("Driver socket error:", error);
@@ -102,25 +104,26 @@ export function startDriverSocketServer(socketPath, app) {
   });
 }
 
-function buildJSONRPCServer(app) {
+function buildJSONRPCServer(socket) {
   const server = new JSONRPCServer();
+  const client = new JSONRPCClient((message) => {
+    socket.write(JSON.stringify(message));
+    socket.write("\n");
+  });
+  const result = new JSONRPCServerAndClient(server, client);
 
-  server.addMethod("triggerGlobalShortcut", ({ accelerator }) =>
-    triggerGlobalShortcut(accelerator),
-  );
+  socket.on("data", async (data) => {
+    try {
+      const message = JSON.parse(data.toString());
+      logger.info("Received JSON-RPC message:", message);
 
-  server.addMethod("enterText", ({ text }) => {
-    const window = getFocusedWindow();
-    window.webContents.send("enterText", text);
-
-    ipcMain.once("enterTextDone", () => {
-      notificationClients.forEach((client) => {
-        client.notify("enterTextDone");
-      });
-    });
+      await result.receiveAndSend(message);
+    } catch (error) {
+      logger.error("Error processing JSON-RPC message:", error);
+    }
   });
 
-  return server;
+  return result;
 }
 
 const ERROR_CODES = {
@@ -136,11 +139,4 @@ function getFocusedWindow() {
     );
   }
   return window;
-}
-
-function buildJSONRPCClientForNotifications(socket) {
-  return new JSONRPCClient((message) => {
-    socket.write(JSON.stringify(message));
-    socket.write("\n");
-  });
 }
