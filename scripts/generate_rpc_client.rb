@@ -63,7 +63,7 @@ class RpcClientGenerator
   private
 
   def class_name
-    StringHelpers.pascal_case(@spec[:info][:title]) + 'Client'
+    StringHelpers.words_to_pascal_case(@spec[:info][:title]) + 'Client'
   end
 
   def relative_spec_path
@@ -78,7 +78,7 @@ module StringHelpers
     str.gsub(/([A-Z])/, '_\\1').downcase.sub(/^_/, '')
   end
 
-  def pascal_case(str)
+  def words_to_pascal_case(str)
     str.split(/\s+/).map(&:capitalize).join
   end
 
