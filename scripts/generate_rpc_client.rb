@@ -27,14 +27,14 @@ class RpcClientGenerator
     RUBY
 
     methods.each do |method|
-      method_name = snake_case(method[:name])
-      params = method[:params]&.map { |p| snake_case(p[:name]) } || []
+      method_name = StringHelpers.snake_case(method[:name])
+      params = method[:params]&.map { |p| StringHelpers.snake_case(p[:name]) } || []
 
       method_args = params.map { |p| "#{p}:" }.join(', ')
       params_hash_content = params.map { |p| "#{p}:" }.join(', ')
 
       result_parts << "\n"
-      result_parts << indent_string(<<~RUBY, 2)
+      result_parts << StringHelpers.indent_string(<<~RUBY, 2)
         def #{method_name}(#{method_args})
           @json_rpc_client.send_command_and_wait("#{method[:name]}", params: {#{params_hash_content}})
         end
@@ -42,10 +42,10 @@ class RpcClientGenerator
     end
 
     notifications.each do |notification|
-      notification_name = snake_case(notification[:name])
+      notification_name = StringHelpers.snake_case(notification[:name])
 
       result_parts << "\n"
-      result_parts << indent_string(<<~RUBY, 2)
+      result_parts << StringHelpers.indent_string(<<~RUBY, 2)
         def wait_for_#{notification_name}(timeout: 5)
           @json_rpc_client.wait_for_notification("#{notification[:name]}", timeout:)
         end
@@ -57,25 +57,29 @@ class RpcClientGenerator
   end
 
   def filename
-    "#{snake_case(class_name)}.rb"
+    "#{StringHelpers.snake_case(class_name)}.rb"
   end
 
   private
 
   def class_name
-    camel_case(@spec[:info][:title]) + 'Client'
+    StringHelpers.pascal_case(@spec[:info][:title]) + 'Client'
   end
 
   def relative_spec_path
     @openrpc_spec_path.relative_path_from(Pathname.new(__dir__).join('..'))
   end
+end
 
-  def camel_case(str)
-    str.split(/\s+/).map(&:capitalize).join
-  end
+module StringHelpers
+  module_function
 
   def snake_case(str)
     str.gsub(/([A-Z])/, '_\\1').downcase.sub(/^_/, '')
+  end
+
+  def pascal_case(str)
+    str.split(/\s+/).map(&:capitalize).join
   end
 
   def indent_string(string, spaces)
