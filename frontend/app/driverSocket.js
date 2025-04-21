@@ -29,9 +29,7 @@ export function startDriverSocketServer(socketPath, app) {
   }
 
   app.on("startup-finished", () => {
-    notificationClients.forEach((client) => {
-      client.notify("startupFinished");
-    });
+    notifyAllClients("startupFinished");
   });
 
   app.on("browser-window-created", (_, window) => {
@@ -41,9 +39,7 @@ export function startDriverSocketServer(socketPath, app) {
     });
 
     window.on("show", () => {
-      notificationClients.forEach((client) => {
-        client.notify("windowShown", { id: window.id, page });
-      });
+      notifyAllClients("windowShown", { id: window.id, page });
     });
   });
 
@@ -61,9 +57,7 @@ export function startDriverSocketServer(socketPath, app) {
       window.webContents.send("enterText", text);
 
       ipcMain.once("enterTextDone", () => {
-        notificationClients.forEach((client) => {
-          client.notify("enterTextDone");
-        });
+        notifyAllClients("enterTextDone");
       });
     });
 
@@ -124,6 +118,12 @@ function buildJSONRPCServer(socket) {
   });
 
   return result;
+}
+
+function notifyAllClients(method, params) {
+  notificationClients.forEach((client) => {
+    client.notify(method, params);
+  });
 }
 
 const ERROR_CODES = {
