@@ -19,6 +19,10 @@ export function buildElectronAppDriverProtocolServer(server, handlers) {
     throw new Error("Missing handler: handleEnterText");
   }
   server.addMethod("enterText", handlers.handleEnterText);
+  if (typeof handlers.handleSendKey !== "function") {
+    throw new Error("Missing handler: handleSendKey");
+  }
+  server.addMethod("sendKey", handlers.handleSendKey);
 
   return {
     notifyStartupFinished() {

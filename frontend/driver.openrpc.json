@@ -56,6 +56,27 @@
       ]
     },
     {
+      "name": "sendKey",
+      "description": "Send a key event to the currently focused element",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "key",
+          "description": "Key to send (e.g., 'Enter', 'Cmd+R')",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
       "name": "startupFinished",
       "description": "Sent when the application has completed its startup process",
       "params": [],

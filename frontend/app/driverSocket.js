@@ -65,6 +65,10 @@ export function startDriverSocketServer(socketPath, app) {
             );
           });
         },
+        handleSendKey: ({ key }) => {
+          const window = getFocusedWindow();
+          window.webContents.send("sendKey", key);
+        },
       },
     );
 
