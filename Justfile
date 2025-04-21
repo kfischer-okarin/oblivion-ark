@@ -18,6 +18,10 @@ fix files="":
 generate-classes:
   ruby scripts/generate_json_rpc_classes.rb
 
+[working-directory: 'acceptance-tests']
+acceptance-tests:
+  bundle exec ruby test/*.rb
+
 [working-directory: 'frontend']
 build: vite-build
   npx electron-forge package
