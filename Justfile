@@ -16,7 +16,7 @@ fix files="":
   npx eslint . --fix {{files}}
 
 generate-classes:
-  ruby scripts/generate_rpc_client.rb
+  ruby scripts/generate_json_rpc_classes.rb
 
 [working-directory: 'frontend']
 build: vite-build
