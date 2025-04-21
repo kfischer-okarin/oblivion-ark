@@ -12,7 +12,7 @@ import {
 import { triggerGlobalShortcut } from "./globalShortcuts.js";
 import { logger } from "./logger.js";
 
-let server;
+let socketServer;
 let notificationClients = [];
 
 /**
@@ -22,7 +22,7 @@ let notificationClients = [];
  * @returns {object} The created server instance or null if no socket path was provided
  */
 export function startDriverSocketServer(socketPath, app) {
-  if (server) {
+  if (socketServer) {
     logger.warn("Driver socket server already running. Doing nothing.");
     return;
   }
@@ -48,7 +48,7 @@ export function startDriverSocketServer(socketPath, app) {
     });
   });
 
-  server = net.createServer((socket) => {
+  socketServer = net.createServer((socket) => {
     logger.info("Driver connected");
     notificationClients.push(buildJSONRPCClientForNotifications(socket));
 
@@ -76,7 +76,7 @@ export function startDriverSocketServer(socketPath, app) {
     });
   });
 
-  server.on("error", (error) => {
+  socketServer.on("error", (error) => {
     logger.error(`Driver socket server error: ${error.message}`);
 
     // If the socket file already exists, try to remove it and retry
@@ -91,13 +91,13 @@ export function startDriverSocketServer(socketPath, app) {
     }
   });
 
-  server.listen(socketPath, () => {
+  socketServer.listen(socketPath, () => {
     logger.info(`Driver socket listening at ${socketPath}`);
 
     // Prepend so it will be before the logger is closed
     app.prependListener("will-quit", () => {
       logger.info("Cleaning up driver socket");
-      server.close();
+      socketServer.close();
     });
   });
 }
