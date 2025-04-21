@@ -10,6 +10,7 @@ import {
   JSONRPCServerAndClient,
 } from "json-rpc-2.0";
 
+import { buildElectronAppDriverProtocolServer } from "./electronAppDriverProtocolServer.js";
 import { triggerGlobalShortcut } from "./globalShortcuts.js";
 import { logger } from "./logger.js";
 
@@ -29,7 +30,7 @@ export function startDriverSocketServer(socketPath, app) {
   }
 
   app.on("startup-finished", () => {
-    notifyAllClients("startupFinished");
+    notificationClients.forEach((client) => client.notifyStartupFinished());
   });
 
   app.on("browser-window-created", (_, window) => {
@@ -39,27 +40,33 @@ export function startDriverSocketServer(socketPath, app) {
     });
 
     window.on("show", () => {
-      notifyAllClients("windowShown", { id: window.id, page });
+      notificationClients.forEach((client) =>
+        client.notifyWindowShown(window.id, page),
+      );
     });
   });
 
   socketServer = net.createServer((socket) => {
     logger.info("Driver connected");
 
-    const server = buildJSONRPCServer(socket);
+    const server = buildElectronAppDriverProtocolServer(
+      buildJSONRPCServer(socket),
+      {
+        handleTriggerGlobalShortcut: ({ accelerator }) => {
+          triggerGlobalShortcut(accelerator);
+        },
+        handleEnterText: ({ text }) => {
+          const window = getFocusedWindow();
+          window.webContents.send("enterText", text);
 
-    server.addMethod("triggerGlobalShortcut", ({ accelerator }) =>
-      triggerGlobalShortcut(accelerator),
+          ipcMain.once("enterTextDone", () => {
+            notificationClients.forEach((client) =>
+              client.notifyEnterTextDone(),
+            );
+          });
+        },
+      },
     );
-
-    server.addMethod("enterText", ({ text }) => {
-      const window = getFocusedWindow();
-      window.webContents.send("enterText", text);
-
-      ipcMain.once("enterTextDone", () => {
-        notifyAllClients("enterTextDone");
-      });
-    });
 
     notificationClients.push(server);
 
@@ -118,12 +125,6 @@ function buildJSONRPCServer(socket) {
   });
 
   return result;
-}
-
-function notifyAllClients(method, params) {
-  notificationClients.forEach((client) => {
-    client.notify(method, params);
-  });
 }
 
 const ERROR_CODES = {
