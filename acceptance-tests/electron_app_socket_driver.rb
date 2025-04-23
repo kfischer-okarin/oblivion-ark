@@ -46,6 +46,10 @@ class ElectronAppSocketDriver
     @driver_client.wait_for_enter_text_done
   end
 
+  def submit_note
+    @driver_client.send_key(key: 'Cmd+Enter')
+  end
+
   def teardown
   end
 end
