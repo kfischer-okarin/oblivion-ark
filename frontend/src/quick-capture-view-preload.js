@@ -4,9 +4,7 @@ const { contextBridge, ipcRenderer } = require("electron/renderer");
 
 import { defineDriverCommandHandlers } from "./driverCommands.js";
 
-const { windowId, driverActive } = JSON.parse(
-  process.argv[process.argv.length - 1],
-);
+const { driverActive } = JSON.parse(process.argv[process.argv.length - 1]);
 
 contextBridge.exposeInMainWorld("electron", {});
 
