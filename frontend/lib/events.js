@@ -16,9 +16,8 @@ export const MainEvents = {
 export const buildRendererEvent = (eventName) => ({
   logEvents: (ipcMain, logger) => {
     ipcMain.on(eventName, (_, payload) => {
-      logger.info(
-        `Received renderer '${eventName}' event: ${JSON.stringify(payload)}`,
-      );
+      const payloadDetails = payload ? `: ${JSON.stringify(payload)}` : "";
+      logger.info(`Received renderer '${eventName}' event${payloadDetails}`);
     });
   },
   send: (ipcRenderer, payload) => ipcRenderer.send(eventName, payload),
