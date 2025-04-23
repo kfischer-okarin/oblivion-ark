@@ -13,4 +13,6 @@ export const buildRendererEvent = (eventName) => ({
   onNextEvent: (ipcMain, callback) => ipcMain.once(eventName, callback),
 });
 
-export const SubmitNoteEvent = buildRendererEvent("submitNote");
+export const RendererEvents = {
+  SubmitNote: buildRendererEvent("submitNote"),
+};

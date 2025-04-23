@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 
-import { SubmitNoteEvent } from "../lib/events.js";
+import { RendererEvents } from "../lib/events.js";
 import { parseCliArgs } from "./cliArgs.js";
 import { startDriverSocketServer } from "./driverSocket.js";
 import {
@@ -22,7 +22,7 @@ logger.info("-".repeat(80));
 logger.info("Application starting with args:", cliArgs);
 logger.info("Production Build:", app.isPackaged);
 
-SubmitNoteEvent.logEvents(ipcMain, logger);
+RendererEvents.SubmitNote.logEvents(ipcMain, logger);
 
 const settings = {
   quickCaptureKey: "Shift+F5",
