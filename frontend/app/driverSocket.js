@@ -10,6 +10,7 @@ import {
   JSONRPCServerAndClient,
 } from "json-rpc-2.0";
 
+import { MainEvents, RendererEvents } from "../lib/events.js";
 import { buildElectronAppDriverProtocolServer } from "./electronAppDriverProtocolServer.js";
 import { triggerGlobalShortcut } from "./globalShortcuts.js";
 import { logger } from "./logger.js";
@@ -57,9 +58,9 @@ export function startDriverSocketServer(socketPath, app) {
         },
         handleEnterText: ({ text }) => {
           const window = getFocusedWindow();
-          window.webContents.send("enterText", text);
+          MainEvents.EnterText.sendToWindow(window, text);
 
-          ipcMain.once("enterTextDone", () => {
+          RendererEvents.EnterTextDone.onNextEvent(ipcMain, () => {
             notificationClients.forEach((client) =>
               client.notifyEnterTextDone(),
             );
@@ -67,7 +68,7 @@ export function startDriverSocketServer(socketPath, app) {
         },
         handleSendKey: ({ key }) => {
           const window = getFocusedWindow();
-          window.webContents.send("sendKey", key);
+          MainEvents.SendKey.sendToWindow(window, key);
         },
       },
     );

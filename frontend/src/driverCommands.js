@@ -1,16 +1,18 @@
+import { MainEvents, RendererEvents } from "../lib/events";
+
 export function defineDriverCommandHandlers(ipcRenderer) {
-  ipcRenderer.on("enterText", async (_, text) => {
+  MainEvents.EnterText.addListener(ipcRenderer, async (_, text) => {
     console.log("Received text to enter:", text);
 
     if (isCodeMirrorEditor(document.activeElement)) {
       await simulateTypingInCodeMirrorEditor(text);
-      ipcRenderer.send("enterTextDone");
+      RendererEvents.EnterTextDone.send(ipcRenderer);
     } else {
       throw new Error("Don't know how to enter text in this element");
     }
   });
 
-  ipcRenderer.on("sendKey", (_, keyString) => {
+  MainEvents.SendKey.addListener(ipcRenderer, (_, keyString) => {
     console.log("Received key to send:", keyString);
 
     const keyParts = keyString.split("+");

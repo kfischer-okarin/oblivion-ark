@@ -1,3 +1,18 @@
+export const buildMainEvent = (eventName) => ({
+  sendToWindow: (window, payload) =>
+    window.webContents.send(eventName, payload),
+  addListener: (ipcRenderer, callback) => ipcRenderer.on(eventName, callback),
+  removeListener: (ipcRenderer, callback) =>
+    ipcRenderer.removeListener(eventName, callback),
+  onNextEvent: (ipcRenderer, callback) => ipcRenderer.once(eventName, callback),
+});
+
+export const MainEvents = {
+  // Driver commands
+  EnterText: buildMainEvent("enterText"),
+  SendKey: buildMainEvent("sendKey"),
+};
+
 export const buildRendererEvent = (eventName) => ({
   logEvents: (ipcMain, logger) => {
     ipcMain.on(eventName, (_, payload) => {
@@ -15,6 +30,8 @@ export const buildRendererEvent = (eventName) => ({
 
 export const RendererEvents = {
   SubmitNote: buildRendererEvent("submitNote"),
+  // Driver events
+  EnterTextDone: buildRendererEvent("enterTextDone"),
 };
 
 RendererEvents.logEvents = (ipcMain, logger) => {
