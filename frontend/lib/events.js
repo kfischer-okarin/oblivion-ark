@@ -16,3 +16,11 @@ export const buildRendererEvent = (eventName) => ({
 export const RendererEvents = {
   SubmitNote: buildRendererEvent("submitNote"),
 };
+
+RendererEvents.logEvents = (ipcMain, logger) => {
+  Object.values(RendererEvents).forEach((event) => {
+    if (typeof event.logEvents === "function") {
+      event.logEvents(ipcMain, logger);
+    }
+  });
+};

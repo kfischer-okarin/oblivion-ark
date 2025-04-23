@@ -22,7 +22,7 @@ logger.info("-".repeat(80));
 logger.info("Application starting with args:", cliArgs);
 logger.info("Production Build:", app.isPackaged);
 
-RendererEvents.SubmitNote.logEvents(ipcMain, logger);
+RendererEvents.logEvents(ipcMain, logger);
 
 const settings = {
   quickCaptureKey: "Shift+F5",
