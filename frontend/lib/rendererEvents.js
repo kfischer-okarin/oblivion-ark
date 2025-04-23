@@ -1,14 +1,16 @@
-export const WindowReadyEvent = {
+export const buildEvent = (eventName) => ({
   logEvents: (ipcMain, logger) => {
-    ipcMain.on("windowReady", (_, payload) => {
+    ipcMain.on(eventName, (_, payload) => {
       logger.info(
-        `Received renderer 'windowReady' event: ${JSON.stringify(payload)}`,
+        `Received renderer '${eventName}' event: ${JSON.stringify(payload)}`,
       );
     });
   },
-  send: (ipcRenderer, payload) => ipcRenderer.send("windowReady", payload),
-  addListener: (ipcMain, callback) => ipcMain.on("windowReady", callback),
+  send: (ipcRenderer, payload) => ipcRenderer.send(eventName, payload),
+  addListener: (ipcMain, callback) => ipcMain.on(eventName, callback),
   removeListener: (ipcMain, callback) =>
-    ipcMain.removeListener("windowReady", callback),
-  onNextEvent: (ipcMain, callback) => ipcMain.once("windowReady", callback),
-};
+    ipcMain.removeListener(eventName, callback),
+  onNextEvent: (ipcMain, callback) => ipcMain.once(eventName, callback),
+});
+
+export const WindowReadyEvent = buildEvent("windowReady");
