@@ -13,4 +13,4 @@ export const buildEvent = (eventName) => ({
   onNextEvent: (ipcMain, callback) => ipcMain.once(eventName, callback),
 });
 
-export const WindowReadyEvent = buildEvent("windowReady");
+export const SubmitNoteEvent = buildEvent("submitNote");

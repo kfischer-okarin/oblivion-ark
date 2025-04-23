@@ -36,6 +36,14 @@
         extensions: [
           keymap.of([
             ...standardKeymap,
+            {
+              key: 'Mod-Enter',
+              run: () => {
+                const noteContent = view.state.doc.toString();
+                window.OblivionArk.submitNote(noteContent);
+                return true;
+              },
+            },
           ]),
           history(),
           oneDarkTheme,
