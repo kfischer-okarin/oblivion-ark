@@ -6,7 +6,7 @@ import { defineDriverCommandHandlers } from "./driverCommands.js";
 
 const { driverActive } = JSON.parse(process.argv[process.argv.length - 1]);
 
-contextBridge.exposeInMainWorld("electron", {});
+contextBridge.exposeInMainWorld("OblivionArk", {});
 
 if (driverActive) {
   console.log("Connected to driver socket");
