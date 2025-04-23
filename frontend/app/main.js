@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 
-import { SubmitNoteEvent } from "../lib/rendererEvents.js";
+import { SubmitNoteEvent } from "../lib/events.js";
 import { parseCliArgs } from "./cliArgs.js";
 import { startDriverSocketServer } from "./driverSocket.js";
 import {

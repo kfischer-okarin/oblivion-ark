@@ -2,7 +2,7 @@
 // and we don't want vite to bundle it
 const { contextBridge, ipcRenderer } = require("electron/renderer");
 
-import { SubmitNoteEvent } from "../lib/rendererEvents";
+import { SubmitNoteEvent } from "../lib/events.js";
 import { defineDriverCommandHandlers } from "./driverCommands.js";
 
 const { driverActive } = JSON.parse(process.argv[process.argv.length - 1]);
