@@ -9,6 +9,64 @@ export function defineDriverCommandHandlers(ipcRenderer) {
       throw new Error("Don't know how to enter text in this element");
     }
   });
+
+  ipcRenderer.on("sendKey", (_, keyString) => {
+    console.log("Received key to send:", keyString);
+
+    const keyParts = keyString.split("+");
+    const key = keyParts[keyParts.length - 1];
+    const modifierStrings = keyParts.slice(0, -1);
+
+    // Initialize modifier flags
+    const modifiers = {
+      metaKey: false,
+      ctrlKey: false,
+      altKey: false,
+      shiftKey: false,
+    };
+
+    const duplicateModifierError = new Error(
+      `Duplicate modifier in key: ${keyString}`,
+    );
+    for (const mod of modifierStrings) {
+      const lowerMod = mod.toLowerCase();
+
+      // Set the appropriate modifier flag
+      if (["cmd", "command", "meta"].includes(lowerMod)) {
+        if (modifiers.metaKey) {
+          throw duplicateModifierError;
+        }
+        modifiers.metaKey = true;
+      } else if (["ctrl", "control"].includes(lowerMod)) {
+        if (modifiers.ctrlKey) {
+          throw duplicateModifierError;
+        }
+        modifiers.ctrlKey = true;
+      } else if (["alt", "option"].includes(lowerMod)) {
+        if (modifiers.altKey) {
+          throw duplicateModifierError;
+        }
+        modifiers.altKey = true;
+      } else if (["shift"].includes(lowerMod)) {
+        if (modifiers.shiftKey) {
+          throw duplicateModifierError;
+        }
+        modifiers.shiftKey = true;
+      } else {
+        throw new Error(`Unknown modifier: ${mod}`);
+      }
+    }
+
+    // Create and dispatch the keyboard event with all modifiers
+    const event = new KeyboardEvent("keydown", {
+      key: key,
+      ...modifiers,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    document.activeElement.dispatchEvent(event);
+  });
 }
 
 function isCodeMirrorEditor(element) {
