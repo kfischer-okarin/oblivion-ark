@@ -1,4 +1,4 @@
-export const buildEvent = (eventName) => ({
+export const buildRendererEvent = (eventName) => ({
   logEvents: (ipcMain, logger) => {
     ipcMain.on(eventName, (_, payload) => {
       logger.info(
@@ -13,4 +13,4 @@ export const buildEvent = (eventName) => ({
   onNextEvent: (ipcMain, callback) => ipcMain.once(eventName, callback),
 });
 
-export const SubmitNoteEvent = buildEvent("submitNote");
+export const SubmitNoteEvent = buildRendererEvent("submitNote");
