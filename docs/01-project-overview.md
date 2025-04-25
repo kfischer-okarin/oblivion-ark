@@ -46,7 +46,7 @@ flowchart TD
 
     %% Container Boundary
     subgraph OblivionArk["Oblivion Ark"]
-        DesktopApp["Electron UI<br/>[Container: Javascript, Electron]<br/>Provides user interface for capturing and viewing notes"]
+        DesktopApp["Desktop Application<br/>[Container: Javascript, Electron]<br/>Provides user interface for capturing and viewing notes"]
         BackendService["Backend Service<br/>[Container: Ruby]<br/>Processes notes, manages context awareness, and handles external integrations"]
         NoteStorage["Note Storage<br/>[Container: SQLite]<br/>Stores raw note content and metadata"]
         SemanticStorage["Semantic Note Storage<br/>[Container: Chroma]<br/>Stores vectorized representations of notes for semantic search"]
