@@ -12,11 +12,11 @@ contextually related notes.
 <!-- markdownlint-disable MD013 -->
 ```mermaid
 flowchart TD
-    User["<h4>Personal User</h4>[Person]"]
-    OblivionArk["<h4>Oblivion Ark</h4>[Software System]<br/>Allows user to take notes<br/>and view them"]
-    Ollama["<h4>Ollama</h4>[Software System]<br/>Local LLM Provider"]
-    OS["<h4>Operating System</h4>[Software System]<br/>The operating system"]
-    CloudStorage["<h4>Dropbox</h4>[Software System]<br/>Stores copy of<br/>the note database"]
+    User["Personal User<br/>[Person]"]
+    OblivionArk["Oblivion Ark<br/>[Software System]<br/>Allows user to take notes<br/>and view them"]
+    Ollama["Ollama<br/>[Software System]<br/>Local LLM Provider"]
+    OS["Operating System<br/>[Software System]<br/>The operating system"]
+    CloudStorage["Dropbox<br/>[Software System]<br/>Stores copy of<br/>the note database"]
 
     User --"Captures and retrieves notes"--> OblivionArk
     OblivionArk --"Analyses notes and discovers Semantic connections"--> Ollama
@@ -39,27 +39,27 @@ flowchart TD
 ```mermaid
 flowchart TD
     %% External Entities
-    User["<h4>Personal User</h4>[Person]"]
-    Ollama["<h4>Ollama</h4>[Software System]<br/>Local LLM Provider"]
-    OS["<h4>Operating System</h4>[Software System]<br/>The operating system"]
-    CloudStorage["<h4>Dropbox</h4>[Software System]<br/>Stores copy of<br/>the note database"]
+    User["Personal User<br/>[Person]"]
+    Ollama["Ollama<br/>[Software System]<br/>Local LLM Provider"]
+    OS["Operating System<br/>[Software System]<br/>The operating system"]
+    CloudStorage["Dropbox<br/>[Software System]<br/>Stores copy of the note database"]
 
     %% Container Boundary
     subgraph OblivionArk["Oblivion Ark"]
-        DesktopApp["<h4>Electron UI</h4>[Container: Javascript, Electron]<br/>Provides user interface for capturing and viewing notes"]
-        BackendService["<h4>Backend Service</h4>[Container: Ruby]<br/>Processes notes, manages context<br/>awareness, and handles external integrations"]
-        NoteStorage["<h4>Note Storage</h4>[Container: SQLite]<br/>Stores raw note content and metadata"]
-        SemanticStorage["<h4>Semantic Note Storage</h4>[Container: Chroma]<br/>Stores vectorized representations of notes for semantic search"]
+        DesktopApp["Electron UI<br/>[Container: Javascript, Electron]<br/>Provides user interface for capturing and viewing notes"]
+        BackendService["Backend Service<br/>[Container: Ruby]<br/>Processes notes, manages context awareness, and handles external integrations"]
+        NoteStorage["Note Storage<br/>[Container: SQLite]<br/>Stores raw note content and metadata"]
+        SemanticStorage["Semantic Note Storage<br/>[Container: Chroma]<br/>Stores vectorized representations of notes for semantic search"]
     end
 
     %% Relationships
-    User --"Captures and<br/>retrieves notes"--> DesktopApp
+    User --"Captures and retrieves notes"--> DesktopApp
     DesktopApp <--"Sends user input and requests<br/>[Unix Socket, JSON-RPC]"--> BackendService
-    BackendService --"Reads from and<br/>writes to"--> NoteStorage
-    BackendService --"Stores and<br/>queries note vectors"--> SemanticStorage
-    BackendService --"Sends notes for vectorization<br/>and semantic analysis"--> Ollama
-    BackendService --"Retrieves<br/>application context"--> OS
-    BackendService --"Syncs and<br/>backs up notes"--> CloudStorage
+    BackendService --"Reads from and writes to"--> NoteStorage
+    BackendService --"Stores and queries note vectors"--> SemanticStorage
+    BackendService --"Sends notes for vectorization and semantic analysis"--> Ollama
+    BackendService --"Retrieves application context"--> OS
+    BackendService --"Syncs and backs up notes"--> CloudStorage
 
     %% Styling
     classDef container fill:#1168bd,stroke:#0b4884,color:white
