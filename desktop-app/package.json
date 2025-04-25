@@ -36,7 +36,7 @@
     "json-rpc-2.0": "For sending inter-process messages",
     "luxon": "For date and time manipulation",
     "prettier": "For formatting the code",
-    "vite": "For building the frontend"
+    "vite": "For building the desktop-app"
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.0",

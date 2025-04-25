@@ -18,9 +18,9 @@ class AppProcess < SubProcess
   private
 
   def find_app_executable_path
-    frontend_path = Pathname.new(__dir__) / '..' / '..' / 'frontend'
-    app_path = frontend_path.glob('out/**/*.app').first
-    app_path.glob('Contents/MacOS/*').first.to_s
+    app_path = Pathname.new(__dir__) / '..' / '..' / 'desktop-app'
+    package_path = app_path.glob('out/**/*.app').first
+    package_path.glob('Contents/MacOS/*').first.to_s
   end
 
   def prepare_socket_path

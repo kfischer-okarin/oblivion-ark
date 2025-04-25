@@ -7,7 +7,7 @@ The system should support quick note-taking, context-aware linking, semantic sea
 
 # Architecture
 - `backend/` contains a Ruby server process that handles the actual application logic
-- `frontend/` contains an Electron UI frontend that communicates via a Unix Socket with the backend process
+- `desktop-app/` contains an Electron UI frontend that communicates via a Unix Socket with the backend process
 
 
 # Development Tools

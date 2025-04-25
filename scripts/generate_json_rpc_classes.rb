@@ -193,7 +193,7 @@ module StringHelpers
 end
 
 if __FILE__ == $PROGRAM_NAME
-  spec_path = Pathname.new(__dir__) / '..' / 'frontend' / 'driver.openrpc.json'
+  spec_path = Pathname.new(__dir__) / '..' / 'desktop-app' / 'driver.openrpc.json'
 
   # Generate client code
   client_generator = RpcClientGenerator.new(spec_path)
@@ -205,7 +205,7 @@ if __FILE__ == $PROGRAM_NAME
   # Generate server code
   server_generator = RpcServerGenerator.new(spec_path)
   server_code = server_generator.code
-  server_output_path = Pathname.new(__dir__) / '..' / 'frontend' / 'app' / server_generator.filename
+  server_output_path = Pathname.new(__dir__) / '..' / 'desktop-app' / 'app' / server_generator.filename
   File.write(server_output_path, server_code)
   system "just fix #{server_output_path}"
   puts "Generated RPC server code at #{server_output_path}"

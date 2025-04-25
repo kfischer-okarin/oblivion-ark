@@ -1,5 +1,5 @@
 // This file is auto-generated. Do not edit it manually.
-// Generated from OpenRPC spec at frontend/driver.openrpc.json
+// Generated from OpenRPC spec at desktop-app/driver.openrpc.json
 
 /**
  * Builds an RPC server with methods and notification functions
