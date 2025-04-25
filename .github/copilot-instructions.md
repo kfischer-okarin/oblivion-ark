@@ -1,15 +1,3 @@
-# Project Outline
-This is a personal note-taking application designed for seamless capture, deep interconnections, and AI-driven organization.
-The system should support quick note-taking, context-aware linking, semantic search, and background AI processing.
-
-# Technology Stack
-- Frontend: Electron
-
-# Architecture
-- `backend/` contains a Ruby server process that handles the actual application logic
-- `desktop-app/` contains an Electron UI frontend that communicates via a Unix Socket with the backend process
-
-
 # Development Tools
 - Run `just fix` after applying changes to fix the code format. NEVER spend time on fixing format issues yourself.
 
