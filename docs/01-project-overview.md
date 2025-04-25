@@ -73,3 +73,14 @@ flowchart TD
     class User user
 ```
 <!-- markdownlint-enable MD013 -->
+
+## Directory Structure
+
+```text
+oblivion-ark/
+├── acceptance-tests/  # Acceptance Tests
+├── desktop-app/       # Desktop application
+├── docs/              # Documentation for developers
+├── resources/         # Static assets
+└── scripts/           # Utility scripts
+```
