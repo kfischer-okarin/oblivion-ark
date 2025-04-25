@@ -9,15 +9,15 @@ contextually related notes.
 ### System Context
 ```mermaid
 flowchart TD
-    User["Personal User<br/>(Primary User)"]
-    OblivionArk["Oblivion Ark<br/>(Desktop Note-taking Application)"]
-    Ollama["Ollama<br/>(Local AI Service)"]
-    OS["Operating System<br/>(Context Information)"]
-    CloudStorage["Personal Cloud Storage<br/>(Dropbox/Google Drive)"]
+    User["<h4>Personal User</h4>[Person]"]
+    OblivionArk["<h4>Oblivion Ark</h4>[Software System]<br/>Allows user to take notes<br/>and view them"]
+    Ollama["<h4>Ollama</h4>[Software System]<br/>Local LLM Provider"]
+    OS["<h4>Operating System</h4>[Software System]<br/>The operating system"]
+    CloudStorage["<h4>Dropbox</h4>[Software System]<br/>Stores copy of<br/>the note database"]
 
-    User --"Captures notes<br/>Retrieves information"--> OblivionArk
-    OblivionArk --"AI-powered analysis<br/>Semantic connections"--> Ollama
-    OblivionArk --"Retrieves context<br/>(Running applications)"--> OS
+    User --"Captures and retrieves notes"--> OblivionArk
+    OblivionArk --"Analyses notes and discovers Semantic connections"--> Ollama
+    OblivionArk --"Retrieves note taking context"--> OS
     OblivionArk --"Syncs/Backs up notes"--> CloudStorage
 
     classDef system fill:#1168bd,stroke:#0b4884,color:white
