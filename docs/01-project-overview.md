@@ -6,7 +6,10 @@ computer and automatic AI-powered interconnections to other semantically or
 contextually related notes.
 
 ## Architecture
+
 ### System Context
+
+<!-- markdownlint-disable MD013 -->
 ```mermaid
 flowchart TD
     User["<h4>Personal User</h4>[Person]"]
@@ -28,3 +31,4 @@ flowchart TD
     class Ollama,OS,CloudStorage external
     class User user
 ```
+<!-- markdownlint-enable MD013 -->
