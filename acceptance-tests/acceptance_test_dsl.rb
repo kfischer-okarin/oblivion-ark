@@ -4,14 +4,26 @@
 #
 # It is included in the AcceptanceTest class, which is the base class for all acceptance tests.
 module AcceptanceTestDSL
-  def start_capture_note
+  def user_presses_capture_note_shortcut
     @driver_client.trigger_global_shortcut(accelerator: 'Shift+F5')
+  end
+
+  def expect_note_capture_window_to_show
     @driver_client.wait_for_window_shown # TODO: Match page
   end
 
-  def enter_note_text(text)
+  def user_types(text)
     @driver_client.enter_text(text:)
     @driver_client.wait_for_enter_text_done
+  end
+
+  def start_capture_note
+    user_presses_capture_note_shortcut
+    expect_note_capture_window_to_show
+  end
+
+  def enter_note_text(text)
+    user_types text
   end
 
   def submit_note
