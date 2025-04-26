@@ -23,15 +23,15 @@ class ElectronAppDriverProtocolClient
     @json_rpc_client.send_command_and_wait("resetApplication", params: {})
   end
 
-  def wait_for_startup_finished(timeout: 5)
-    @json_rpc_client.wait_for_notification("startupFinished", timeout:)
+  def wait_for_startup_finished(params_matcher: nil, timeout: 5)
+    @json_rpc_client.wait_for_notification("startupFinished", params_matcher:, timeout:)
   end
 
-  def wait_for_window_shown(timeout: 5)
-    @json_rpc_client.wait_for_notification("windowShown", timeout:)
+  def wait_for_window_shown(params_matcher: nil, timeout: 5)
+    @json_rpc_client.wait_for_notification("windowShown", params_matcher:, timeout:)
   end
 
-  def wait_for_enter_text_done(timeout: 5)
-    @json_rpc_client.wait_for_notification("enterTextDone", timeout:)
+  def wait_for_enter_text_done(params_matcher: nil, timeout: 5)
+    @json_rpc_client.wait_for_notification("enterTextDone", params_matcher:, timeout:)
   end
 end

@@ -55,7 +55,11 @@ class JsonRpcClient
     response
   end
 
-  def wait_for_notification(notification_type, timeout: 5)
+  MATCH_ANY = ->(value) { true }
+
+  def wait_for_notification(notification_type, params_matcher: nil, timeout: 5)
+    params_matcher ||= MATCH_ANY
+
     notification = nil
 
     wait_for("notification of type #{notification_type}", timeout: timeout) do
@@ -63,6 +67,7 @@ class JsonRpcClient
         unless @received_message_queue.empty?
           notification = @received_message_queue.pop
           puts "Received notification: #{notification.inspect}"
+          return false unless params_matcher.call(notification[:params])
           return notification if notification[:method] == notification_type
         end
         false

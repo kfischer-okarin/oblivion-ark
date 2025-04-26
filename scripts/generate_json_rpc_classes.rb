@@ -47,8 +47,8 @@ class RpcClientGenerator
 
       result_parts << "\n"
       result_parts << StringHelpers.indent_string(<<~RUBY, 2)
-        def wait_for_#{notification_name}(timeout: 5)
-          @json_rpc_client.wait_for_notification("#{notification[:name]}", timeout:)
+        def wait_for_#{notification_name}(params_matcher: nil, timeout: 5)
+          @json_rpc_client.wait_for_notification("#{notification[:name]}", params_matcher:, timeout:)
         end
       RUBY
     end
