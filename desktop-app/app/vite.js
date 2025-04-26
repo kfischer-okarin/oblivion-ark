@@ -5,13 +5,16 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function integrateWithVite(app, pageLoader) {
+  // Use built preload scripts both in dev and prod
+  // TODO: Also hot-reload the preload script
+  pageLoader.preloadScriptPath = (pathFromProjectRoot) =>
+    resolve(__dirname, "../dist", pathFromProjectRoot);
+
   if (app.isPackaged) {
     // dist is the default output directory for Vite
     pageLoader.loadPage = async (window, pathFromProjectRoot) => {
       await window.loadFile(join("dist", pathFromProjectRoot));
     };
-    pageLoader.preloadScriptPath = (pathFromProjectRoot) =>
-      resolve(__dirname, "../dist", pathFromProjectRoot);
     return;
   }
 
@@ -45,7 +48,6 @@ async function integrateWithVite(app, pageLoader) {
 
   pageLoader.loadPage = async (window, pathFromProjectRoot) =>
     window.loadURL(`http://localhost:5173/${pathFromProjectRoot}`);
-  // TODO: Also hot-reload the preload script
 }
 
 const LOG_PREFIX = "\x1b[32m[VITE]\x1b[0m";
