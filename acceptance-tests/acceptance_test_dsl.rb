@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # AcceptanceTestDSL provides a high-level interface for end-to-end testing of the Oblivion Ark application.
 # This module contains helper methods that abstract the lower-level interactions with the electron app driver,
 # allowing tests to be written in a more readable and domain-focused way.
