@@ -19,7 +19,7 @@ class ElectronAppSocketDriver
 
     def start_app_process
       build_application
-      app_process = AppProcess.new
+      app_process = AppProcess.start
 
       at_exit do
         puts 'Shutting down Electron app...'
