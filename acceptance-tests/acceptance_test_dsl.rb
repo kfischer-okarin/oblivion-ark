@@ -12,8 +12,4 @@ module AcceptanceTestDSL
   def submit_note
     @driver_client.send_key(key: 'Cmd+Enter')
   end
-
-  def method_missing(name, *args, &block)
-    skip "DSL method `#{name}` not yet implemented"
-  end
 end
