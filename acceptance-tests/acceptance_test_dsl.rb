@@ -4,12 +4,16 @@
 #
 # It is included in the AcceptanceTest class, which is the base class for all acceptance tests.
 module AcceptanceTestDSL
+  NOTE_CAPTURE_WINDOW_PAGE = 'quick-capture-view.html'
+
   def user_presses_capture_note_shortcut
     @driver_client.trigger_global_shortcut(accelerator: 'Shift+F5')
   end
 
   def expect_note_capture_window_to_show
-    @driver_client.wait_for_window_shown # TODO: Match page
+    @driver_client.wait_for_window_shown(
+      params_matcher: ->(params) { params[:page] == NOTE_CAPTURE_WINDOW_PAGE }
+    )
   end
 
   def user_types(text)
