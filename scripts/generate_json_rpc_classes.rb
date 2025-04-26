@@ -30,12 +30,13 @@ class RpcClientGenerator
       method_name = StringHelpers.snake_case(method[:name])
       params = method[:params]&.map { |p| StringHelpers.snake_case(p[:name]) } || []
 
-      method_args = params.map { |p| "#{p}:" }.join(', ')
+      method_signature = params.map { |p| "#{p}:" }.join(', ')
+      method_signature = "(#{method_signature})" unless method_signature.empty?
       params_hash_content = params.map { |p| "#{p}:" }.join(', ')
 
       result_parts << "\n"
       result_parts << StringHelpers.indent_string(<<~RUBY, 2)
-        def #{method_name}(#{method_args})
+        def #{method_name}#{method_signature}
           @json_rpc_client.send_command_and_wait("#{method[:name]}", params: {#{params_hash_content}})
         end
       RUBY
