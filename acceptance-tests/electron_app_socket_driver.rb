@@ -4,23 +4,32 @@ require_relative 'lib/json_rpc_client'
 
 class ElectronAppSocketDriver
   class << self
-    def app_process
-      return @app_process if @app_process
+    def driver_client
+      return @driver_client if @driver_client
 
-      build_application
-      @app_process = AppProcess.new
-
-      at_exit do
-        puts 'Shutting down Electron app...'
-        @app_process.kill
-        @app_process.wait_until_finished
-        puts 'Electron app shut down.'
-      end
-
-      @app_process
+      app_process = start_app_process
+      @driver_client = ElectronAppDriverProtocolClient.new(
+        JsonRpcClient.new(app_process.driver_socket)
+      )
+      @driver_client.wait_for_startup_finished
+      @driver_client
     end
 
     private
+
+    def start_app_process
+      build_application
+      app_process = AppProcess.new
+
+      at_exit do
+        puts 'Shutting down Electron app...'
+        app_process.kill
+        app_process.wait_until_finished
+        puts 'Electron app shut down.'
+      end
+
+      app_process
+    end
 
     def build_application
       puts 'Building Electron app...'
@@ -29,11 +38,7 @@ class ElectronAppSocketDriver
   end
 
   def initialize
-    @app_process = self.class.app_process
-    @driver_client = ElectronAppDriverProtocolClient.new(
-      JsonRpcClient.new(@app_process.driver_socket)
-    )
-    @driver_client.wait_for_startup_finished
+    @driver_client = self.class.driver_client
   end
 
   def start_capture_note
