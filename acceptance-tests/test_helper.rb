@@ -24,6 +24,10 @@ class AcceptanceTest < Minitest::Test
 
       @app
     end
+
+    def scenario(name, &block)
+      define_method("test_#{name}", &block)
+    end
   end
 
   def before_setup

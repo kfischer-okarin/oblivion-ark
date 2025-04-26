@@ -1,7 +1,7 @@
 require_relative '../test_helper'
 
 class CapturingNotesTest < AcceptanceTest
-  def test_capture_note
+  scenario 'Capturing a note' do
     start_capture_note
     enter_note_text <<~NOTE
       # Lab Report 35
