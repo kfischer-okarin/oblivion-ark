@@ -30,7 +30,9 @@ class AppProcess
     private
 
     def find_app_executable_path
-      app_path = Pathname.new(__dir__) / '..' / '..' / 'desktop-app'
+      project_root_path = Pathname.new(__dir__)
+      project_root_path = project_root_path.parent until (project_root_path / '.git').exist?
+      app_path = project_root_path / 'desktop-app'
       package_path = app_path.glob('out/**/*.app').first
       package_path.glob('Contents/MacOS/*').first.to_s
     end
