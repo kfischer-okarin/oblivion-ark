@@ -11,6 +11,7 @@ export const MainEvents = {
   // Driver commands
   EnterText: buildMainEvent("enterText"),
   SendKey: buildMainEvent("sendKey"),
+  ResetWindow: buildMainEvent("resetWindow"),
 };
 
 export const buildRendererEvent = (eventName) => ({
