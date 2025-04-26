@@ -4,15 +4,23 @@ require 'socket'
 
 require_relative 'sub_process'
 
-class AppProcess < SubProcess
+class AppProcess
   attr_reader :driver_socket
 
   def initialize
     app_executable_path = find_app_executable_path
     @socket_path = prepare_socket_path
-    super(app_executable_path, ['--driver-socket', @socket_path], name: 'app')
+    @process = SubProcess.new(app_executable_path, ['--driver-socket', @socket_path], name: 'app')
     wait_until_file_exists @socket_path
     @driver_socket = UNIXSocket.new(@socket_path)
+  end
+
+  def wait_until_finished
+    @process.wait_until_finished
+  end
+
+  def kill
+    @process.kill
   end
 
   private
