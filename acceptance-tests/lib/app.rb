@@ -2,14 +2,19 @@ require 'pathname'
 require 'tmpdir'
 require 'socket'
 
+require_relative 'electron_app_driver_protocol_client'
+require_relative 'json_rpc_client'
 require_relative 'sub_process'
 
 class App
-  attr_reader :driver_socket
+  attr_reader :driver_client
 
   def initialize(process:, driver_socket:)
     @process = process
-    @driver_socket = driver_socket
+
+    @driver_client = ElectronAppDriverProtocolClient.new(
+      JsonRpcClient.new(driver_socket)
+    )
   end
 
   def shutdown
@@ -29,7 +34,10 @@ class App
       process = SubProcess.new(app_executable_path, ['--driver-socket', socket_path], name: 'app')
       wait_until_file_exists socket_path
 
-      new(process:, driver_socket: UNIXSocket.new(socket_path))
+      app = new(process:, driver_socket: UNIXSocket.new(socket_path))
+      app.driver_client.wait_for_startup_finished
+
+      app
     end
 
     private
