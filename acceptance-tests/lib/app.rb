@@ -4,7 +4,7 @@ require 'socket'
 
 require_relative 'sub_process'
 
-class AppProcess
+class App
   attr_reader :driver_socket
 
   def initialize(process:, driver_socket:)
