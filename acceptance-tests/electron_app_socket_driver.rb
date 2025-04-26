@@ -56,5 +56,6 @@ class ElectronAppSocketDriver
   end
 
   def teardown
+    @driver_client.reset_application
   end
 end
