@@ -15,12 +15,9 @@ class AppProcess
     @driver_socket = UNIXSocket.new(@socket_path)
   end
 
-  def wait_until_finished
-    @process.wait_until_finished
-  end
-
-  def kill
+  def shutdown
     @process.kill
+    @process.wait_until_finished
   end
 
   private

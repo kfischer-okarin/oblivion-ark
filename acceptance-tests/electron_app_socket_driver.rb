@@ -23,8 +23,7 @@ class ElectronAppSocketDriver
 
       at_exit do
         puts 'Shutting down Electron app...'
-        app_process.kill
-        app_process.wait_until_finished
+        app_process.shutdown
         puts 'Electron app shut down.'
       end
 
