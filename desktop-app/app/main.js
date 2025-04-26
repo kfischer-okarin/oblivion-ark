@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 
-import { RendererEvents } from "../lib/events.js";
+import { RendererEvents, MainEvents } from "../lib/events.js";
 import { parseCliArgs } from "./cliArgs.js";
 import { startDriverSocketServer } from "./driverSocket.js";
 import {
@@ -86,6 +86,7 @@ async function prepareQuickCaptureWindow() {
     if (window.isVisible()) {
       event.preventDefault();
       window.hide();
+      MainEvents.ResetWindow.sendToWindow(window);
     }
   });
 
