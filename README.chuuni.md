@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 -->
 # <ruby>忘界<rt>オブリビオン</rt></ruby><ruby>退避船<rt>アーク</rt></ruby>
 
 ![Logo](./resources/logo-readme.png)
