@@ -77,6 +77,17 @@
       }
     },
     {
+      "name": "resetApplication",
+      "description": "Reset the application to its initial state",
+      "params": [],
+      "result": {
+        "name": "result",
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
       "name": "startupFinished",
       "description": "Sent when the application has completed its startup process",
       "params": [],

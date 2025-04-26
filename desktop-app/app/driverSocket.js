@@ -70,6 +70,13 @@ export function startDriverSocketServer(socketPath, app) {
           const window = getFocusedWindow();
           MainEvents.SendKey.sendToWindow(window, key);
         },
+        handleResetApplication: () => {
+          BrowserWindow.getAllWindows().forEach((window) => {
+            if (window.isVisible()) {
+              window.close();
+            }
+          });
+        },
       },
     );
 

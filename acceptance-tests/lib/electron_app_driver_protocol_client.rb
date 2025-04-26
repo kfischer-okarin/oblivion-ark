@@ -19,6 +19,10 @@ class ElectronAppDriverProtocolClient
     @json_rpc_client.send_command_and_wait("sendKey", params: {key:})
   end
 
+  def reset_application
+    @json_rpc_client.send_command_and_wait("resetApplication", params: {})
+  end
+
   def wait_for_startup_finished(timeout: 5)
     @json_rpc_client.wait_for_notification("startupFinished", timeout:)
   end

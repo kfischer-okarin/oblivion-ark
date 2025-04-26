@@ -23,6 +23,10 @@ export function buildElectronAppDriverProtocolServer(server, handlers) {
     throw new Error("Missing handler: handleSendKey");
   }
   server.addMethod("sendKey", handlers.handleSendKey);
+  if (typeof handlers.handleResetApplication !== "function") {
+    throw new Error("Missing handler: handleResetApplication");
+  }
+  server.addMethod("resetApplication", handlers.handleResetApplication);
 
   return {
     notifyStartupFinished() {
