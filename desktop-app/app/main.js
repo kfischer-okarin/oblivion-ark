@@ -80,6 +80,15 @@ async function prepareQuickCaptureWindow() {
     },
     show: false,
   });
+
+  window.on("close", (event) => {
+    // Prevent the window from being destroyed
+    if (window.isVisible()) {
+      event.preventDefault();
+      window.hide();
+    }
+  });
+
   openLinksWithDefaultBrowser(window);
 
   await pageLoader.loadPage(window, "src/quick-capture-view.html");
