@@ -18,7 +18,7 @@ class ElectronAppSocketDriver
     private
 
     def start_app
-      build_application
+      App.build
       app = App.start
 
       at_exit do
@@ -30,10 +30,6 @@ class ElectronAppSocketDriver
       app
     end
 
-    def build_application
-      puts 'Building Electron app...'
-      SubProcess.execute('just', ['build'], name: 'build', env: {'FORCE_COLOR' => '1'})
-    end
   end
 
   def initialize

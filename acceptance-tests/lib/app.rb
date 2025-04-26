@@ -18,6 +18,11 @@ class App
   end
 
   class << self
+    def build
+      puts 'Building Electron app...'
+      SubProcess.execute('just', ['build'], name: 'build', env: {'FORCE_COLOR' => '1'})
+    end
+
     def start
       app_executable_path = find_app_executable_path
       socket_path = prepare_socket_path
