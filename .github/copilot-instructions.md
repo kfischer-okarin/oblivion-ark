@@ -1,5 +1,6 @@
 # Development Tools
 - Run `just fix` after applying changes to fix the code format. NEVER spend time on fixing format issues yourself.
+- Check commit diff: `git --no-pager show <commit>`
 
 # Coding style
 ## Methods / Functions
