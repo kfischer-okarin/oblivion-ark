@@ -34,8 +34,4 @@ class ElectronAppDriverProtocolClient
   def wait_for_window_shown(params_matcher: nil, timeout: 5)
     @json_rpc_client.wait_for_notification("windowShown", params_matcher:, timeout:)
   end
-
-  def wait_for_enter_text_done(params_matcher: nil, timeout: 5)
-    @json_rpc_client.wait_for_notification("enterTextDone", params_matcher:, timeout:)
-  end
 end

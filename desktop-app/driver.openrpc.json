@@ -150,14 +150,6 @@
       "tags": [
         {"$ref": "#/components/tags/notification"}
       ]
-    },
-    {
-      "name": "enterTextDone",
-      "description": "Sent when text entry triggered by the enterText method has been completed",
-      "params": [],
-      "tags": [
-        {"$ref": "#/components/tags/notification"}
-      ]
     }
   ],
   "components": {

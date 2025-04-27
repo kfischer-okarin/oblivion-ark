@@ -70,8 +70,6 @@ export const buildRendererEvent = (eventName) => ({
 
 export const RendererEvents = {
   SubmitNote: buildRendererEvent("submitNote"),
-  // Driver events
-  EnterTextDone: buildRendererEvent("enterTextDone"),
 };
 
 RendererEvents.logEvents = (ipcMain, logger) => {

@@ -39,8 +39,5 @@ export function buildElectronAppDriverProtocolServer(server, handlers) {
     notifyWindowShown(id, page) {
       server.notify("windowShown", { id, page });
     },
-    notifyEnterTextDone() {
-      server.notify("enterTextDone");
-    },
   };
 }
