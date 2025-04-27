@@ -12,6 +12,35 @@ export function defineDriverCommandHandlers(ipcRenderer) {
     }
   });
 
+  MainEvents.GetTextFieldContent.addListener(ipcRenderer, (_, id) => {
+    console.log("Getting text field content for element with id:", id);
+
+    const element = document.getElementById(id);
+    if (!element) {
+      ipcRenderer.send("getTextFieldContentResponse", {
+        error: `Element with id "${id}" not found`,
+      });
+      return;
+    }
+
+    let content = "";
+    if (isCodeMirrorEditor(element)) {
+      // For CodeMirror editor, we need to get its content
+      content = element.textContent;
+    } else if (
+      element instanceof HTMLTextAreaElement ||
+      element instanceof HTMLInputElement
+    ) {
+      // For standard text inputs or textareas
+      content = element.value;
+    } else {
+      // For other elements, get the text content
+      content = element.textContent;
+    }
+
+    ipcRenderer.send("getTextFieldContentResponse", { result: content });
+  });
+
   MainEvents.SendKey.addListener(ipcRenderer, (_, keyString) => {
     console.log("Received key to send:", keyString);
 

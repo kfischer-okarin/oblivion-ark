@@ -93,6 +93,31 @@
         {"$ref": "#/components/tags/method"}
       ]
     },
+     {
+      "name": "getTextFieldContent",
+      "description": "Get the text content of a text field identified by its id",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "description": "The id of the text field element",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "result",
+        "description": "The content of the text field",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "tags": [
+        {"$ref": "#/components/tags/method"}
+      ]
+    },
     {
       "name": "startupFinished",
       "description": "Sent when the application has completed its startup process",

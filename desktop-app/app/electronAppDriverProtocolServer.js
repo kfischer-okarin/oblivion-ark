@@ -27,6 +27,10 @@ export function buildElectronAppDriverProtocolServer(server, handlers) {
     throw new Error("Missing handler: handleResetApplication");
   }
   server.addMethod("resetApplication", handlers.handleResetApplication);
+  if (typeof handlers.handleGetTextFieldContent !== "function") {
+    throw new Error("Missing handler: handleGetTextFieldContent");
+  }
+  server.addMethod("getTextFieldContent", handlers.handleGetTextFieldContent);
 
   return {
     notifyStartupFinished() {

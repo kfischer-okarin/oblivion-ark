@@ -70,6 +70,23 @@ export function startDriverSocketServer(socketPath, app) {
           const window = getFocusedWindow();
           MainEvents.SendKey.sendToWindow(window, key);
         },
+        handleGetTextFieldContent: ({ id }) => {
+          const window = getFocusedWindow();
+          return new Promise((resolve, reject) => {
+            ipcMain.once("getTextFieldContentResponse", (_, response) => {
+              if (response.result) {
+                resolve(response.result);
+              } else if (response.error) {
+                reject(response.error);
+              } else {
+                reject(
+                  `Unexpected response format: ${JSON.stringify(response)}`,
+                );
+              }
+            });
+            MainEvents.GetTextFieldContent.sendToWindow(window, id);
+          });
+        },
         handleResetApplication: () => {
           BrowserWindow.getAllWindows().forEach((window) => {
             if (window.isVisible()) {
