@@ -7,6 +7,54 @@ export const buildMainEvent = (eventName) => ({
   onNextEvent: (ipcRenderer, callback) => ipcRenderer.once(eventName, callback),
 });
 
+const buildRendererMethod = (methodName) => {
+  const responseEventName = `${methodName}Response`;
+
+  return {
+    sendToWindow: (window, ipcMain, logger, payload) => {
+      const { promise, resolve, reject } = Promise.withResolvers();
+
+      const timeout = setTimeout(() => {
+        logger.error(
+          `Timeout waiting for ${methodName} response. Payload: ${JSON.stringify(
+            payload,
+          )}`,
+        );
+        reject(new Error(`Timeout waiting for ${methodName} response`));
+      }, 10000);
+
+      ipcMain.once(responseEventName, (_, response) => {
+        clearTimeout(timeout);
+
+        if (response.error) {
+          logger.error(`${methodName} reponded with error: ${response.error}`);
+          reject(response.error);
+        } else {
+          const responseDetails = response.result
+            ? `: ${JSON.stringify(response.result)}`
+            : "";
+          logger.info(`Received response for ${methodName}${responseDetails}`);
+          resolve(response.result);
+        }
+      });
+
+      window.webContents.send(methodName, payload);
+
+      return promise;
+    },
+    handleWith: (ipcRenderer, handler) => {
+      ipcRenderer.on(methodName, async (_, payload) => {
+        try {
+          const result = await handler(payload);
+          ipcRenderer.send(responseEventName, { result });
+        } catch (error) {
+          ipcRenderer.send(responseEventName, { error: error.message });
+        }
+      });
+    },
+  };
+};
+
 export const MainEvents = {
   ResetWindow: buildMainEvent("resetWindow"),
   // Driver commands
