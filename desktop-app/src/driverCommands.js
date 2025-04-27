@@ -1,7 +1,7 @@
-import { MainEvents, RendererEvents } from "../lib/events";
+import { RendererMethods, RendererEvents } from "../lib/events";
 
 export function defineDriverCommandHandlers(ipcRenderer) {
-  MainEvents.EnterText.addListener(ipcRenderer, async (_, text) => {
+  RendererMethods.EnterText.handleWith(ipcRenderer, async (text) => {
     console.log("Received text to enter:", text);
 
     if (isCodeMirrorEditor(document.activeElement)) {
@@ -12,15 +12,12 @@ export function defineDriverCommandHandlers(ipcRenderer) {
     }
   });
 
-  MainEvents.GetTextFieldContent.addListener(ipcRenderer, (_, id) => {
+  RendererMethods.GetTextFieldContent.handleWith(ipcRenderer, (id) => {
     console.log("Getting text field content for element with id:", id);
 
     const element = document.getElementById(id);
     if (!element) {
-      ipcRenderer.send("getTextFieldContentResponse", {
-        error: `Element with id "${id}" not found`,
-      });
-      return;
+      throw new Error(`Element with id "${id}" not found`);
     }
 
     let content = "";
@@ -38,10 +35,10 @@ export function defineDriverCommandHandlers(ipcRenderer) {
       content = element.textContent;
     }
 
-    ipcRenderer.send("getTextFieldContentResponse", { result: content });
+    return content;
   });
 
-  MainEvents.SendKey.addListener(ipcRenderer, (_, keyString) => {
+  RendererMethods.SendKey.handleWith(ipcRenderer, (keyString) => {
     console.log("Received key to send:", keyString);
 
     const keyParts = keyString.split("+");

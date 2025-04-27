@@ -10,7 +10,7 @@ import {
   JSONRPCServerAndClient,
 } from "json-rpc-2.0";
 
-import { MainEvents, RendererEvents } from "../lib/events.js";
+import { RendererMethods, RendererEvents } from "../lib/events.js";
 import { buildElectronAppDriverProtocolServer } from "./electronAppDriverProtocolServer.js";
 import { triggerGlobalShortcut } from "./globalShortcuts.js";
 import { logger } from "./logger.js";
@@ -58,7 +58,7 @@ export function startDriverSocketServer(socketPath, app) {
         },
         handleEnterText: ({ text }) => {
           const window = getFocusedWindow();
-          MainEvents.EnterText.sendToWindow(window, text);
+          RendererMethods.EnterText.sendToWindow(window, ipcMain, logger, text);
 
           RendererEvents.EnterTextDone.onNextEvent(ipcMain, () => {
             notificationClients.forEach((client) =>
@@ -68,24 +68,16 @@ export function startDriverSocketServer(socketPath, app) {
         },
         handleSendKey: ({ key }) => {
           const window = getFocusedWindow();
-          MainEvents.SendKey.sendToWindow(window, key);
+          RendererMethods.SendKey.sendToWindow(window, ipcMain, logger, key);
         },
         handleGetTextFieldContent: ({ id }) => {
           const window = getFocusedWindow();
-          return new Promise((resolve, reject) => {
-            ipcMain.once("getTextFieldContentResponse", (_, response) => {
-              if (response.result) {
-                resolve(response.result);
-              } else if (response.error) {
-                reject(response.error);
-              } else {
-                reject(
-                  `Unexpected response format: ${JSON.stringify(response)}`,
-                );
-              }
-            });
-            MainEvents.GetTextFieldContent.sendToWindow(window, id);
-          });
+          return RendererMethods.GetTextFieldContent.sendToWindow(
+            window,
+            ipcMain,
+            logger,
+            id,
+          );
         },
         handleResetApplication: () => {
           BrowserWindow.getAllWindows().forEach((window) => {

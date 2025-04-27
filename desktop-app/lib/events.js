@@ -1,12 +1,3 @@
-export const buildMainEvent = (eventName) => ({
-  sendToWindow: (window, payload) =>
-    window.webContents.send(eventName, payload),
-  addListener: (ipcRenderer, callback) => ipcRenderer.on(eventName, callback),
-  removeListener: (ipcRenderer, callback) =>
-    ipcRenderer.removeListener(eventName, callback),
-  onNextEvent: (ipcRenderer, callback) => ipcRenderer.once(eventName, callback),
-});
-
 const buildRendererMethod = (methodName) => {
   const responseEventName = `${methodName}Response`;
 
@@ -57,13 +48,10 @@ const buildRendererMethod = (methodName) => {
 
 export const RendererMethods = {
   ResetWindow: buildRendererMethod("resetWindow"),
-};
-
-export const MainEvents = {
   // Driver commands
-  EnterText: buildMainEvent("enterText"),
-  SendKey: buildMainEvent("sendKey"),
-  GetTextFieldContent: buildMainEvent("getTextFieldContent"),
+  EnterText: buildRendererMethod("enterText"),
+  SendKey: buildRendererMethod("sendKey"),
+  GetTextFieldContent: buildRendererMethod("getTextFieldContent"),
 };
 
 export const buildRendererEvent = (eventName) => ({
