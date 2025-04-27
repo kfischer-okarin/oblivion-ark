@@ -23,6 +23,11 @@ module AcceptanceTestDSL
     @driver_client.wait_for_enter_text_done
   end
 
+  def expect_note_editor_content_to_be(expected_content)
+    content_response = @driver_client.get_text_field_content(id: 'editor')
+    assert_equal expected_content, content_response[:result]
+  end
+
   def start_capture_note
     user_presses_capture_note_shortcut
     expect_note_capture_window_to_show
