@@ -60,7 +60,7 @@
       // Focus the editor immediately
       view.focus();
 
-      window.OblivionArk.onResetWindow(() => {
+      window.OblivionArk.handleResetWindowWith(() => {
         view.dispatch({
           changes: { from: 0, to: view.state.doc.length, insert: '' },
         });

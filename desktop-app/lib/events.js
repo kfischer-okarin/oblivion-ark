@@ -55,8 +55,11 @@ const buildRendererMethod = (methodName) => {
   };
 };
 
+export const RendererMethods = {
+  ResetWindow: buildRendererMethod("resetWindow"),
+};
+
 export const MainEvents = {
-  ResetWindow: buildMainEvent("resetWindow"),
   // Driver commands
   EnterText: buildMainEvent("enterText"),
   SendKey: buildMainEvent("sendKey"),
