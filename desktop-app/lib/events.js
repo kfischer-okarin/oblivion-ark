@@ -12,6 +12,7 @@ export const MainEvents = {
   // Driver commands
   EnterText: buildMainEvent("enterText"),
   SendKey: buildMainEvent("sendKey"),
+  GetTextFieldContent: buildMainEvent("getTextFieldContent"),
 };
 
 export const buildRendererEvent = (eventName) => ({
