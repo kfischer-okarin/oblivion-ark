@@ -74,7 +74,10 @@
         "schema": {
           "type": "null"
         }
-      }
+      },
+      "tags": [
+        {"$ref": "#/components/tags/method"}
+      ]
     },
     {
       "name": "resetApplication",
@@ -85,7 +88,10 @@
         "schema": {
           "type": "null"
         }
-      }
+      },
+      "tags": [
+        {"$ref": "#/components/tags/method"}
+      ]
     },
     {
       "name": "startupFinished",
