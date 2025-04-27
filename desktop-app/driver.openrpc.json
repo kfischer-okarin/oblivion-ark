@@ -33,7 +33,7 @@
     },
     {
       "name": "enterText",
-      "description": "Enter text into the currently focused element",
+      "description": "Enter text into the currently focused element. The method completes only after the text has been fully entered.",
       "paramStructure": "by-name",
       "params": [
         {

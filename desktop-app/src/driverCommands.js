@@ -6,7 +6,6 @@ export function defineDriverCommandHandlers(ipcRenderer) {
 
     if (isCodeMirrorEditor(document.activeElement)) {
       await simulateTypingInCodeMirrorEditor(text);
-      RendererEvents.EnterTextDone.send(ipcRenderer);
     } else {
       throw new Error("Don't know how to enter text in this element");
     }

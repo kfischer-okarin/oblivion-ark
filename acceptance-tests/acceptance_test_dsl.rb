@@ -20,7 +20,6 @@ module AcceptanceTestDSL
 
   def user_types(text)
     @driver_client.enter_text(text:)
-    @driver_client.wait_for_enter_text_done
   end
 
   def expect_note_editor_content_to_be(expected_content)

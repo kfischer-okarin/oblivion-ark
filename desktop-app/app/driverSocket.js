@@ -56,15 +56,15 @@ export function startDriverSocketServer(socketPath, app) {
         handleTriggerGlobalShortcut: ({ accelerator }) => {
           triggerGlobalShortcut(accelerator);
         },
-        handleEnterText: ({ text }) => {
+        handleEnterText: async ({ text }) => {
           const window = getFocusedWindow();
-          RendererMethods.EnterText.sendToWindow(window, ipcMain, logger, text);
-
-          RendererEvents.EnterTextDone.onNextEvent(ipcMain, () => {
-            notificationClients.forEach((client) =>
-              client.notifyEnterTextDone(),
-            );
-          });
+          const result = await RendererMethods.EnterText.sendToWindow(
+            window,
+            ipcMain,
+            logger,
+            text,
+          );
+          return result;
         },
         handleSendKey: ({ key }) => {
           const window = getFocusedWindow();
