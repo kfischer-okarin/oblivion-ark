@@ -8,10 +8,10 @@ export const buildMainEvent = (eventName) => ({
 });
 
 export const MainEvents = {
+  ResetWindow: buildMainEvent("resetWindow"),
   // Driver commands
   EnterText: buildMainEvent("enterText"),
   SendKey: buildMainEvent("sendKey"),
-  ResetWindow: buildMainEvent("resetWindow"),
 };
 
 export const buildRendererEvent = (eventName) => ({
