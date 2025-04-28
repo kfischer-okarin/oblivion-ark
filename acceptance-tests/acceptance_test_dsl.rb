@@ -8,7 +8,7 @@
 module AcceptanceTestDSL
   NOTE_CAPTURE_WINDOW_PAGE = 'note-capture-window.html'
 
-  def user_presses_capture_note_shortcut
+  def press_capture_note_shortcut
     @driver_client.trigger_global_shortcut(accelerator: 'Shift+F5')
   end
 
@@ -18,7 +18,7 @@ module AcceptanceTestDSL
     )
   end
 
-  def user_types(text)
+  def type_text(text)
     @driver_client.enter_text(text:)
   end
 
@@ -27,13 +27,9 @@ module AcceptanceTestDSL
     assert_equal expected_content, content_response[:result]
   end
 
-  def start_capture_note
-    user_presses_capture_note_shortcut
+  def open_note_capture_window
+    press_capture_note_shortcut
     expect_note_capture_window_to_show
-  end
-
-  def enter_note_text(text)
-    user_types text
   end
 
   def submit_note
