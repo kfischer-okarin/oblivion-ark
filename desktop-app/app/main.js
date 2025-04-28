@@ -46,7 +46,7 @@ if (cliArgs.driverSocketPath) {
 }
 
 app.commands = {
-  noteCapture: () => {
+  startNoteCapture: () => {
     if (noteCaptureWindow) {
       noteCaptureWindow.show();
     }
@@ -56,7 +56,7 @@ app.commands = {
 app.on("ready", async () => {
   noteCaptureWindow = await prepareNoteCaptureWindow();
 
-  registerGlobalShortcut(settings.noteCaptureKey, app.commands.noteCapture);
+  registerGlobalShortcut(settings.noteCaptureKey, app.commands.startNoteCapture);
   app.emit("startup-finished");
 });
 
