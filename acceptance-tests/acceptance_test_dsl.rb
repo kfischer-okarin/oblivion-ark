@@ -6,7 +6,7 @@
 #
 # It is included in the AcceptanceTest class, which is the base class for all acceptance tests.
 module AcceptanceTestDSL
-  NOTE_CAPTURE_WINDOW_PAGE = 'quick-capture-view.html'
+  NOTE_CAPTURE_WINDOW_PAGE = 'note-capture-window.html'
 
   def user_presses_capture_note_shortcut
     @driver_client.trigger_global_shortcut(accelerator: 'Shift+F5')

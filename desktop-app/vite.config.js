@@ -29,10 +29,10 @@ export default defineConfig({
         },
       },
       input: {
-        quickCaptureView: resolve(__dirname, "src/quick-capture-view.html"),
-        quickCaptureViewPreload: resolve(
+        noteCaptureWindow: resolve(__dirname, "src/note-capture-window.html"),
+        noteCaptureWindowPreload: resolve(
           __dirname,
-          "src/quick-capture-view-preload.js",
+          "src/note-capture-window-preload.js",
         ),
       },
     },

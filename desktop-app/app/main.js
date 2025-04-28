@@ -25,7 +25,7 @@ logger.info("Production Build:", app.isPackaged);
 RendererEvents.logEvents(ipcMain, logger);
 
 const settings = {
-  quickCaptureKey: "Shift+F5",
+  noteCaptureKey: "Shift+F5",
 };
 
 const pageLoader = {
@@ -37,7 +37,7 @@ const pageLoader = {
 
 await integrateWithVite(app, pageLoader);
 
-let quickCaptureWindow;
+let noteCaptureWindow;
 const commonPreloadArguments = {};
 
 if (cliArgs.driverSocketPath) {
@@ -46,17 +46,17 @@ if (cliArgs.driverSocketPath) {
 }
 
 app.commands = {
-  quickCapture: () => {
-    if (quickCaptureWindow) {
-      quickCaptureWindow.show();
+  noteCapture: () => {
+    if (noteCaptureWindow) {
+      noteCaptureWindow.show();
     }
   },
 };
 
 app.on("ready", async () => {
-  quickCaptureWindow = await prepareQuickCaptureWindow();
+  noteCaptureWindow = await prepareNoteCaptureWindow();
 
-  registerGlobalShortcut(settings.quickCaptureKey, app.commands.quickCapture);
+  registerGlobalShortcut(settings.noteCaptureKey, app.commands.noteCapture);
   app.emit("startup-finished");
 });
 
@@ -66,7 +66,7 @@ app.on("will-quit", () => {
   logger.close();
 });
 
-async function prepareQuickCaptureWindow() {
+async function prepareNoteCaptureWindow() {
   const window = new BrowserWindow({
     width: 640,
     height: 240,
@@ -74,7 +74,7 @@ async function prepareQuickCaptureWindow() {
     webPreferences: {
       devTools: true,
       preload: pageLoader.preloadScriptPath(
-        "src/quick-capture-view-preload.js",
+        "src/note-capture-window-preload.js",
       ),
       additionalArguments: additionalRendererArguments(),
     },
@@ -92,7 +92,7 @@ async function prepareQuickCaptureWindow() {
 
   openLinksWithDefaultBrowser(window);
 
-  await pageLoader.loadPage(window, "src/quick-capture-view.html");
+  await pageLoader.loadPage(window, "src/note-capture-window.html");
 
   return window;
 }
