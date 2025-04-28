@@ -32,7 +32,7 @@ module AcceptanceTestDSL
     expect_note_capture_window_to_show
   end
 
-  def submit_note
-    @driver_client.send_key(key: 'Cmd+Enter')
+  def press_key(key)
+    @driver_client.send_key(key:)
   end
 end
