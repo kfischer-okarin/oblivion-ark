@@ -56,7 +56,10 @@ app.commands = {
 app.on("ready", async () => {
   noteCaptureWindow = await prepareNoteCaptureWindow();
 
-  registerGlobalShortcut(settings.noteCaptureKey, app.commands.startNoteCapture);
+  registerGlobalShortcut(
+    settings.noteCaptureKey,
+    app.commands.startNoteCapture,
+  );
   app.emit("startup-finished");
 });
 
