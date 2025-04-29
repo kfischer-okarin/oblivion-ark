@@ -17,7 +17,8 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.5",
     "prettier": "^3.5.3",
-    "vite": "^6.2.1"
+    "vite": "^6.2.1",
+    "vitest": "^3.1.2"
   },
   "dependencyComments": {
     "@codemirror/commands": "Codemirror base package: Editor Commands",
@@ -36,7 +37,8 @@
     "json-rpc-2.0": "For sending inter-process messages",
     "luxon": "For date and time manipulation",
     "prettier": "For formatting the code",
-    "vite": "For building the desktop-app"
+    "vite": "For building the desktop app",
+    "vitest": "For unit testing the desktop app windows"
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.0",
