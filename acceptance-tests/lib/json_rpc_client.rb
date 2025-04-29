@@ -2,6 +2,16 @@ require 'json'
 require 'securerandom'
 require 'thread'
 
+# A client implementation of JSON-RPC 2.0 protocol for bidirectional
+# communication via an IO stream object.
+#
+# This class provides functionality to:
+# - Send JSON-RPC commands and wait for the corresponding response
+# - Wait for a specific type of notification from the server
+#
+# It serves as the low-level communication layer for the automated testing
+# framework, supporting higher-level protocol clients like
+# ElectronAppDriverProtocolClient.
 class JsonRpcClient
   def initialize(io)
     @io = io

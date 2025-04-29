@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
-# AcceptanceTestDSL provides a high-level interface for end-to-end testing of the Oblivion Ark application.
-# This module contains helper methods that abstract the lower-level interactions with the electron app driver,
-# allowing tests to be written in a more readable and domain-focused way.
+# This module provides a DSL for describing the application's behaviour in an
+# expressive format.
 #
-# It is included in the AcceptanceTest class, which is the base class for all acceptance tests.
+# The DSL is written from the user's perspective with action methods in the
+# imperative and expectations starting with `expect_`.
+#
+# It is included in the AcceptanceTest class, which is the base class for all
+# acceptance tests. It is kept separate from the base class to have the whole
+# DSL in one place.
 module AcceptanceTestDSL
   NOTE_CAPTURE_WINDOW_PAGE = 'note-capture-window.html'
 

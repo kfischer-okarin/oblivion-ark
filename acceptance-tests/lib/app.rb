@@ -6,6 +6,15 @@ require_relative 'electron_app_driver_protocol_client'
 require_relative 'json_rpc_client'
 require_relative 'sub_process'
 
+# This class manages the lifecycle of the Electron application during
+# acceptance testing.
+#
+# It provides:
+# - Functionality to build and start the application
+# - A connected driver client instance for communication with the application
+#
+# This class acts as a facade that encapsulates the complexity of test setup
+# and communication with the application under test.
 class App
   attr_reader :driver_client
 

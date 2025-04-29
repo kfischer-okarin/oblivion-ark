@@ -1,7 +1,13 @@
 require 'open3'
 
-# SubProcess handles spawning, monitoring and controlling a subprocess
-# It forwards output to stdout/stderr with clearly labeled prefixes
+# This is a utility class for managing external processes and forwarding their
+# output to the calling process's output streams.
+#
+# It adds color-coded prefixes to the output of the command being executed,
+# allowing for easier identification of the source of the output.
+#
+# The class is used to run the processes involved in the acceptance tests,
+# such as the Electron app and the build process.
 class SubProcess
   ASCII_RED = 31
   ASCII_YELLOW = 33
