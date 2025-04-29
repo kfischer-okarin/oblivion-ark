@@ -20,6 +20,14 @@ class RpcClientGenerator
       # Generated from OpenRPC spec at #{relative_spec_path}
       # frozen_string_literal: true
 
+      # This class is a client implementation of the OpenRPC spec at
+      # #{relative_spec_path}.
+      #
+      # It provides methods for each method defined in the spec as well as waiter
+      # methods for each notification type.
+      #
+      # It wraps a low-level JsonRpcClient instance and is used by the acceptance
+      # test DSL to communicate with the Electron application.
       class #{class_name}
         def initialize(json_rpc_client)
           @json_rpc_client = json_rpc_client

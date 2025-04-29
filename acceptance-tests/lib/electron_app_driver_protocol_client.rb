@@ -2,6 +2,14 @@
 # Generated from OpenRPC spec at desktop-app/driver.openrpc.json
 # frozen_string_literal: true
 
+# This class is a client implementation of the OpenRPC spec at
+# desktop-app/driver.openrpc.json.
+#
+# It provides methods for each method defined in the spec as well as waiter
+# methods for each notification type.
+#
+# It wraps a low-level JsonRpcClient instance and is used by the acceptance
+# test DSL to communicate with the Electron application.
 class ElectronAppDriverProtocolClient
   def initialize(json_rpc_client)
     @json_rpc_client = json_rpc_client
