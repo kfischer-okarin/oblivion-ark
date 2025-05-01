@@ -46,4 +46,8 @@ export default defineConfig({
     strictPort: true,
     port: 5173,
   },
+  test: {
+    environment: "happy-dom",
+    globals: true,
+  },
 });
