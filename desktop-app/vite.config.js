@@ -2,6 +2,7 @@ import { dirname, resolve, relative, extname } from "path";
 import { fileURLToPath } from "url";
 
 import { defineConfig } from "vite";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -15,6 +16,7 @@ const addExtensionIfMissing = (filePath, extension) => {
 export default defineConfig({
   // Make sure that vite output uses relative paths otherwise it will not work inside a packaged Electron app
   base: "./",
+  plugins: [svelte()],
   build: {
     rollupOptions: {
       // Make sure that output files are always at the same location inside dist
