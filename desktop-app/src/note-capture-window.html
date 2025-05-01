@@ -7,64 +7,20 @@
     body {
       margin: 0;
     }
-    html, body, #editor, .cm-editor {
+    html, body, #svelte-root {
       height: 100%;
-    }
-    .cm-editor .cm-content {
-      font-size: 16px;
-      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <div id="editor"></div>
-
+  <div id="svelte-root"></div>
   <script type="module">
-    import { EditorState } from '@codemirror/state';
-    import { keymap, EditorView, placeholder } from '@codemirror/view';
-    import { standardKeymap, history } from '@codemirror/commands';
-    import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
-    import { oneDarkTheme, oneDarkHighlightStyle } from '@codemirror/theme-one-dark';
+    import { mount } from "svelte";
 
-    import markdownStyleDecorations from '@/codemirror-extensions/markdownStyleDecorations.js';
+    import App from "./components/App.svelte";
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Create editor view
-      const view = new EditorView({
-        doc: '',
-        parent: document.getElementById('editor'),
-        extensions: [
-          keymap.of([
-            ...standardKeymap,
-            {
-              key: 'Mod-Enter',
-              run: () => {
-                const noteContent = view.state.doc.toString();
-                window.OblivionArk.submitNote(noteContent);
-                return true;
-              },
-            },
-          ]),
-          history(),
-          oneDarkTheme,
-          placeholder('Type your notes here...'),
-          markdown({
-            base: markdownLanguage,
-          }),
-          markdownStyleDecorations({
-            highlightStyle: oneDarkHighlightStyle,
-          }),
-        ],
-      });
-
-      // Focus the editor immediately
-      view.focus();
-
-      window.OblivionArk.handleResetWindowWith(() => {
-        view.dispatch({
-          changes: { from: 0, to: view.state.doc.length, insert: '' },
-        });
-      });
+    mount(App, {
+      target: document.getElementById("svelte-root"),
     });
   </script>
 </body>
