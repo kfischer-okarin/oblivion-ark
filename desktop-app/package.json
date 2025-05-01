@@ -19,6 +19,7 @@
     "eslint-plugin-prettier": "^5.2.5",
     "happy-dom": "^17.4.4",
     "prettier": "^3.5.3",
+    "svelte": "^5.28.2",
     "vite": "^6.2.1",
     "vitest": "^3.1.2"
   },
@@ -41,6 +42,7 @@
     "json-rpc-2.0": "For sending inter-process messages",
     "luxon": "For date and time manipulation",
     "prettier": "For formatting the code",
+    "svelte": "For building the UI",
     "vite": "For building the desktop app",
     "vitest": "For unit testing the desktop app windows"
   },
